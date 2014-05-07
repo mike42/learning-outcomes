@@ -1,4 +1,5 @@
 function metric_wordcount(text) {
+	/* Count the number of words in the text */
 	var wc = 0; // Wordcount
 	var prevIsAlph = false; // Previous character wsa part of a word
 	var isAlph, c;
@@ -15,13 +16,15 @@ function metric_wordcount(text) {
 }
 
 function metric_readability(text) {
-	
+	/* Calculate the readability score */
 }
 
 function metric_keywords(text) {
-	
+	/* Count keywords */
+
 }
 
 function test(text) {
+	
 	console.log(metric_wordcount(text));
 }
