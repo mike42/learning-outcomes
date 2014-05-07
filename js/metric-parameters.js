@@ -1,4 +1,4 @@
-{
+var metric_parameters = {
     "word_lists": {
         "knowledge": "l",
         "comprehension": "l",
@@ -235,4 +235,4 @@
             "message": "You seem to use the words __WORDS__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
         }
     ]
-}
+};

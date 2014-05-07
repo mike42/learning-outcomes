@@ -1,17 +1,22 @@
 /**
  * Chop up the source into sentences and words for computing metrics.
  * 
- * @param passage Text to read in
- * @returns Array of sentences contained in the text, with each sentence being an array of words. All words will be returned in lowercase.
+ * @param passage
+ *            Text to read in
+ * @returns Array of sentences contained in the text, with each sentence being
+ *          an array of words. All words will be returned in lowercase.
  */
 function metric_read_passage(passage) {
-	// Replace ". " or ".\n" outside of parenthesis with "\n". Used to divide sentences correctly.
+	// Replace ". " or ".\n" outside of parenthesis with "\n". Used to divide
+	// sentences correctly.
+	var alph = 'abcdefghijklmnopqrstuvwxyz-\'1234567890.';
+	var endSentence = '\n\r?!';
 	var i, c, d, e = 0, text = '';
 	for(i = 0; i < passage.length; i++) {
 		c = passage.substring(i, i + 1).toLowerCase();
 		if(c == '.' && e == 0) {
-			d = passage.substring(i, i + 2).toLowerCase();
-			if(d == "." || d == ". " || d == ".\n") {
+			d = passage.substring(i + 1, i + 2).toLowerCase();
+			if(d == "" || alph.indexOf(d) == -1) {
 				c = "\n";
 			}
 		} else if(c == "(") {
@@ -30,8 +35,6 @@ function metric_read_passage(passage) {
 	var prevIsAlph = false; // Previous character was part of a word
 	var isAlph, isEndSentence;
 	var word = '';
-	var alph = 'abcdefghijklmnopqrstuvwxyz-\'1234567890.';
-	var endSentence = '\n\r?!';
 
 	/* Current sentence and stack of previous ones */
 	var sentence = [];
@@ -69,30 +72,43 @@ function metric_read_passage(passage) {
 /**
  * Flesch-Kincaid Reading Ease Score corresponding to these metrics
  * http://en.wikipedia.org/wiki/Flesch-Kincaid#Flesch_Reading_Ease
+ * 
  * @param totalWords
  * @param totalSentences
  * @param totalSyllables
- * @return The readability score
+ * @return The readability score, or NaN if empty data was given.
  */
 function metric_passage_readability(totalWords, totalSentences, totalSyllables) {
+	if(totalSentences == 0 || totalWords == 0) {
+		return NaN;
+	}
 	return 206.835 - 1.015 * (totalWords / totalSentences) - 84.6 * (totalSyllables / totalWords);
 }
 
 /**
  * Estimate the number of syllables in a word
  * 
- * @param word The text to check
+ * @param word
+ *            The text to check
  * @returns The number of syllables found
  */
 function metric_word_syllable(word) {
-	
-	return 0;
+	if(word.length <= 3) { return 1; } 
+	word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+	word = word.replace(/^y/, '');
+	var a = word.match(/[aeiouy]{1,2}/g);
+	if(a == null) {
+		// Long word with no vowels??
+		return 1;
+	}
+	return a.length;
 }
 
 /**
  * Count the words, syllables and sentences in the passage
  * 
- * @param sentences The list of sentences to analyse
+ * @param sentences
+ *            The list of sentences to analyse
  * @return The counts of the text
  */
 function metric_passage_wordcount(sentences) {
@@ -108,13 +124,45 @@ function metric_passage_wordcount(sentences) {
 	return {totalWords: totalWords, totalSentences: totalSentences, totalSyllables: totalSyllables};
 }
 
-function metric_passage_keywords(passage) {
-	
+/**
+ * Count keywords in the text
+ * 
+ * @param sentences
+ *            The list of sentences to analyse
+ * @returns
+ */
+function metric_passage_keywords(sentences) {
+	// TODO
+	console.log(metric_parameters);
+	return;
+}
+
+/**
+ * Find any over-used words of more than 1 syllable.
+ * 
+ * @param sentences
+ *            The list of sentences to analyse
+ * @returns
+ */
+function metric_repetition(sentences) {
+	// TODO
+	console.log(sentences);
+	return;
 }
 
 function test(text) {
 	var passage = metric_read_passage(text);
 	console.log(passage);
-	//var counts = metric_passage_wordcount(passage);
-	//console.log(counts);
+	
+	var counts = metric_passage_wordcount(passage);
+	console.log(counts);
+	
+	var readability = metric_passage_readability(counts.totalWords, counts.totalSentences, counts.totalSyllables);
+	console.log(readability);
+	
+	var keywords = metric_passage_keywords(passage);
+	console.log(keywords);
+	
+	var repetition = metric_repetition(passage);
+	console.log(repetition);
 }
