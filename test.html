@@ -1,13 +1,20 @@
 <html>
 <head>
-	<title>Test</title>
+<title>Test</title>
 </head>
 <body>
-<textarea id="txtTest"></textarea>
-<input type="button" onClick="test($('#txtTest').val())" value="OK" />
+	<h3>Metrics test page</h3>
 
-<script src="js/metrics.js"></script>
-<script src="js/jquery-1.11.1.min.js"></script>
+	<textarea id="txtTest"  cols=80 rows=10 ></textarea><br />
+	
+	<table>
+	<tr><td><input type="button" onClick="test($('#txtTest').val());" value="OK" /></td><td></td></tr>
+	
+	
+	</table>
+	
 
+	<script src="js/metrics.js"></script>
+	<script src="js/jquery-1.11.1.min.js"></script>
 </body>
 </html>
