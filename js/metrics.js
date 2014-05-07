@@ -132,9 +132,38 @@ function metric_passage_wordcount(sentences) {
  * @returns
  */
 function metric_passage_keywords(sentences) {
-	// TODO
-	console.log(metric_parameters);
-	return;
+	// Construct associative array of all words
+    var list_l = {}, list_h = {};
+    var i, j;
+    // Lower order
+    for(i = 0; i < metric_parameters.word_l.knowledge.length; i++)
+        list_l[metric_parameters.word_l.knowledge[i]] = 1;
+    for(i = 0; i < metric_parameters.word_l.comprehension.length; i++)
+        list_l[metric_parameters.word_l.comprehension[i]] = 1;
+    for(i = 0; i < metric_parameters.word_l.application.length; i++)
+        list_l[metric_parameters.word_l.application[i]] = 1;
+    // Higher order
+    for(i = 0; i < metric_parameters.word_h.analysis.length; i++)
+        list_h[metric_parameters.word_h.analysis[i]] = 1;
+    for(i = 0; i < metric_parameters.word_h.synthesis.length; i++)
+        list_h[metric_parameters.word_h.synthesis[i]] = 1;
+    for(i = 0; i < metric_parameters.word_h.evaluation.length; i++)
+        list_h[metric_parameters.word_h.evaluation[i]] = 1;
+
+    // Go ahead and count them
+    var word_h = 0, word_l = 0, w;
+	for(i = 0; i < sentences.length; i++) {
+		for(j = 0; j < sentences[i].length; j++) {
+            w = sentences[i][j][0];
+		    if(list_l[w] != undefined) {
+                word_l++;
+            }
+            if(list_h[w] != undefined) {
+                word_h++;
+            }
+		}
+	}
+	return {word_h: word_h, word_l: word_l};
 }
 
 /**
