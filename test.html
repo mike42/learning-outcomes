@@ -5,13 +5,13 @@
 <body>
 	<h3>Metrics test page</h3>
 
+    <p>Enter text and hit "OK" to view metrics.</p>
+
 	<textarea id="txtTest"  cols=80 rows=10 ></textarea><br />
 	
-	<table>
-	<tr><td><input type="button" onClick="test($('#txtTest').val());" value="OK" /></td><td></td></tr>
-	
-	
-	</table>
+	<p><input type="button" onClick="test($('#txtTest').val());" value="OK" /></p>
+
+    <p id="result">..</p>
 	
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/metric-parameters.js"></script>

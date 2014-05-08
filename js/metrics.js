@@ -202,20 +202,29 @@ function metric_repetition(sentences) {
 }
 
 function test(text) {
+    $('#result').empty();
+
 	var passage = metric_read_passage(text);
 	console.log(passage);
 	
 	var counts = metric_passage_wordcount(passage);
-	console.log(counts);
+    console.log(counts);
+	$('#result').append('Words: ' + counts.totalWords + '<br/>');
+	$('#result').append('Sentences: ' + counts.totalSentences + '<br/>');
+	$('#result').append('Syllables: ' + counts.totalSyllables + '<br/>');
 	
 	var readability = metric_passage_readability(counts.totalWords, counts.totalSentences, counts.totalSyllables);
 	console.log(readability);
-	
+	$('#result').append('Readability score: ' + readability + '<br/>');
+
 	var keywords = metric_passage_keywords(passage);
 	console.log(keywords);
+	$('#result').append('Lower order verbs: ' + keywords.word_l + '<br/>');
+	$('#result').append('Higher order verbs: ' + keywords.word_h + '<br/>');
 	
 	var repetition = metric_repetition(passage);
 	console.log(repetition);
+ 	$('#result').append('Over-used words: ' + repetition.join(' ') + '<br/>');
 }
 
 function objSortRev(obj) {
