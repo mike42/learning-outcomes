@@ -152,13 +152,16 @@ function metric_passage_keywords(sentences) {
 
     // Go ahead and count them
     var word_h = 0, word_l = 0, w;
+    var found_h = {}, found_l = {};
 	for(i = 0; i < sentences.length; i++) {
 		for(j = 0; j < sentences[i].length; j++) {
             w = sentences[i][j][0];
-		    if(list_l[w] != undefined) {
+		    if(list_l[w] != undefined && found_l[w] == undefined) {
+                found_l[w] = 1;
                 word_l++;
             }
-            if(list_h[w] != undefined) {
+            if(list_h[w] != undefined && found_h[w] == undefined) {
+                found_h[w] = 1;
                 word_h++;
             }
 		}
