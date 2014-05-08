@@ -201,6 +201,16 @@ function metric_repetition(sentences) {
     return ret;
 }
 
+function metric_example_lwords() {
+    // TODO return three example words as a string
+    return "";
+}
+
+function metric_example_hwords() {
+    // TODO return three example words as a string
+    return "";
+}
+
 function test(text) {
     $('#result').empty();
 

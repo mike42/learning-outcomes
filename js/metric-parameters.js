@@ -170,7 +170,7 @@ var metric_parameters = {
         },
         {
             "rule": [
-                {"var": "keyword_h", "is": "equal", "val": "0"},
+                {"var": "keyword_h", "is": "above", "val": "0"},
                 {"var": "keyword_l", "is": "equal", "val": "0"}
             ],
             "message": "You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__."
@@ -178,7 +178,7 @@ var metric_parameters = {
         {
             "rule": [
                 {"var": "keyword_h", "is": "equal", "val": "0"},
-                {"var": "keyword_l", "is": "equal", "val": "0"}
+                {"var": "keyword_l", "is": "above", "val": "0"}
             ],
             "message": "You are doing a good job describing the comprehension and retention level outcomes you want your students to achieve. Do you want your students to undertake higher level thinking as well, like __HWORDS__?"
         },
