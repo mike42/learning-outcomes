@@ -174,9 +174,31 @@ function metric_passage_keywords(sentences) {
  * @returns
  */
 function metric_repetition(sentences) {
-	// TODO
-	console.log(sentences);
-	return;
+    var rep = {};
+	for(i = 0; i < sentences.length; i++) {
+		for(j = 0; j < sentences[i].length; j++) {
+            if(sentences[i][j][1] <= 1) {
+                // Only worry about words greater than one syllable
+                continue;
+            }
+            w = sentences[i][j][0];
+            if(rep[w] == undefined) {
+                rep[w] = 0;
+            }
+            rep[w]++; 
+		}
+	}
+
+    var k = objSortRev(rep);
+    var count = 0;
+    var ret = [];
+    for(i = 0; i < k.length && count < 3; i++) {
+        if(rep[k[i]] > 3) {
+            ret.push(k[i]);
+            count++;
+        }
+    }
+    return ret;
 }
 
 function test(text) {
@@ -194,4 +216,12 @@ function test(text) {
 	
 	var repetition = metric_repetition(passage);
 	console.log(repetition);
+}
+
+function objSortRev(obj) {
+    var keys = [];
+    for(var key in obj)
+        keys.push(key);
+    var sortedKeys = keys.sort(function(a,b){return obj[a]-obj[b]});
+    return sortedKeys.reverse();
 }
