@@ -206,11 +206,16 @@ function metric_repetition(sentences) {
 
 function metric_example_lwords() {
     // TODO return three example words as a string
-    return "";
+    return [];
 }
 
 function metric_example_hwords() {
     // TODO return three example words as a string
+    return [];
+}
+
+function joinWords(words) {
+    // TODO join an array of English words into a sentence
     return "";
 }
 
@@ -238,6 +243,44 @@ function test(text) {
 	var repetition = metric_repetition(passage);
 	console.log(repetition);
  	$('#result').append('Over-used words: ' + repetition.join(' ') + '<br/>');
+
+    var feedback = metric_provide_feedback({
+        keyword_h: keywords.word_h,
+        keyword_l: keywords.word_l,
+        wordcount: counts.totalWords,
+        readability: readability,
+        repetition: repetition.length,
+        repWords: joinWords(repetition, 'and'),
+        lWords: joinWords(metric_example_lwords(), 'or'),
+        hWords: joinWords(metric_example_hwords(), 'or') 
+    });
+    
+    $('#result').append("<p>" + feedback.join("</p></p>") + "</p>");
+}
+
+function metric_provide_feedback(variables) {
+    var f = []; // Array of feedback strings
+
+    for(i = 0; i < metric_parameters.feedback.length; i++) {
+        if(metric_match_feedback(metric_parameters.feedback[i], variables)) {
+            f.push(metric_subst_feedback(metric_parameters.feedback[i].message, variables));
+        }
+    }
+
+    return f;
+}
+
+function metric_match_feedback(feedback, variables) {
+    // TODO match feedback rule to variables
+    return true;
+}
+
+function metric_subst_feedback(message, variables) {
+    // TODO replace variables in message with values
+    //__REP_WORD__
+    //__HWORDS__
+    //__LWORDS__
+    return message;
 }
 
 function objSortRev(obj) {

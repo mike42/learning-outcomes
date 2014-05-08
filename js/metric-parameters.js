@@ -223,13 +223,13 @@ var metric_parameters = {
             "rule": [
                 {"var": "repetition", "is": "equal", "val": "1"}
             ],
-            "message": "You seem to use the word __WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+            "message": "You seem to use the word __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
         },
         {
             "rule": [
                 {"var": "repetition", "is": "above", "val": "1"}
             ],
-            "message": "You seem to use the words __WORDS__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+            "message": "You seem to use the words __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
         }
     ]
 };
