@@ -280,7 +280,7 @@ function testLearningOutcomeFeedback(text, destination) {
 
 	var passage = metric_read_passage(text);
 	console.log(passage);
-	
+
 	var counts = metric_passage_wordcount(passage);
     console.log(counts);
     $(destination).append('Words: ' + counts.totalWords + '<br/>');
@@ -316,6 +316,10 @@ function testLearningOutcomeFeedback(text, destination) {
         fWords: joinWords(flagged, 'or')
     });
     
+    if(passage.length == 0) {
+        $(destination).append("<p>" + metric_parameters.empty_message + "</p>");
+        return;
+	}
     $(destination).append("<p>" + feedback.join("</p></p>") + "</p>");
 }
 
