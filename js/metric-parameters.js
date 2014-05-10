@@ -1,4 +1,82 @@
 var metric_parameters = {
+    "feedback": [
+        {
+            "rule": [
+                {"var": "keyword_h", "is": "equal", "val": "0"},
+                {"var": "keyword_l", "is": "equal", "val": "0"}
+            ],
+            "message": "Check that you are using active verbs in your outcome that will communicate to your students what skills you are expecting them to demonstrate in completing this unit. Think about comprehension based skills like __LWORDS__, as well as higher order skills like __HWORDS__."
+        },
+        {
+            "rule": [
+                {"var": "keyword_h", "is": "above", "val": "0"},
+                {"var": "keyword_l", "is": "equal", "val": "0"}
+            ],
+            "message": "You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__."
+        },
+        {
+            "rule": [
+                {"var": "keyword_h", "is": "equal", "val": "0"},
+                {"var": "keyword_l", "is": "above", "val": "0"}
+            ],
+            "message": "You are doing a good job describing the comprehension and retention level outcomes you want your students to achieve. Do you want your students to undertake higher level thinking as well, like __HWORDS__?"
+        },
+        {
+            "rule": [
+                {"var": "keyword_h", "is": "above", "val": "0"},
+                {"var": "keyword_l", "is": "above", "val": "0"}
+            ],
+            "message": "You are using verbs that will help students understand the skills you are expecting them to develop over the course of this unit."
+        },
+        {
+            "rule": [
+                {"var": "wordcount", "is": "below", "val": "40"}
+            ],
+            "message": "This is very brief. Are you sure you are conveying all of the skills and attributes you want students to develop in this unit?"
+        },
+        {
+            "rule": [
+                {"var": "wordcount", "is": "above", "val": "180"}
+            ],
+            "message": "This is quite long: ideally these statements should be brief and to the point. Check the level of detail you are including."
+        },
+        {
+            "rule": [
+                {"var": "readability", "is": "above", "val": "60"}
+            ],
+            "message": "Your outcomes are simply written and direct. This readability level will be suitable for all of your students."
+        },
+        {
+            "rule": [
+                {"var": "readability", "is": "range", "val": ["30", "60"]}
+            ],
+            "message": "Your outcomes are written at a level appropriate for university students. Bear in mind that your students will have a range of levels of fluency in English."
+        },
+        {
+            "rule": [
+                {"var": "readability", "is": "below", "val": "30"}
+            ],
+            "message": "Your outcomes are written at a level suitable for university graduates. Given your students will have a range of levels of fluency in English, you may want to see if you can simplify the wording without damaging your intended meaning."
+        },
+        {
+            "rule": [
+                {"var": "repetition", "is": "equal", "val": "1"}
+            ],
+            "message": "You seem to use the word __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+        },
+        {
+            "rule": [
+                {"var": "repetition", "is": "above", "val": "1"}
+            ],
+            "message": "You seem to use the words __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+        },
+        {
+            "rule": [
+                {"var": "flaggedword", "is": "above", "val": "0"}
+            ],
+            "message": "You can't use the word __BAD_WORD__."
+        }
+    ],
     "word_l": {
         "knowledge": [
             "arrange",
@@ -160,76 +238,7 @@ var metric_parameters = {
             "value"
         ],
     },
-    "feedback": [
-        {
-            "rule": [
-                {"var": "keyword_h", "is": "equal", "val": "0"},
-                {"var": "keyword_l", "is": "equal", "val": "0"}
-            ],
-            "message": "Check that you are using active verbs in your outcome that will communicate to your students what skills you are expecting them to demonstrate in completing this unit. Think about comprehension based skills like __LWORDS__, as well as higher order skills like __HWORDS__."
-        },
-        {
-            "rule": [
-                {"var": "keyword_h", "is": "above", "val": "0"},
-                {"var": "keyword_l", "is": "equal", "val": "0"}
-            ],
-            "message": "You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__."
-        },
-        {
-            "rule": [
-                {"var": "keyword_h", "is": "equal", "val": "0"},
-                {"var": "keyword_l", "is": "above", "val": "0"}
-            ],
-            "message": "You are doing a good job describing the comprehension and retention level outcomes you want your students to achieve. Do you want your students to undertake higher level thinking as well, like __HWORDS__?"
-        },
-        {
-            "rule": [
-                {"var": "keyword_h", "is": "above", "val": "0"},
-                {"var": "keyword_l", "is": "above", "val": "0"}
-            ],
-            "message": "You are using verbs that will help students understand the skills you are expecting them to develop over the course of this unit."
-        },
-        {
-            "rule": [
-                {"var": "wordcount", "is": "below", "val": "40"}
-            ],
-            "message": "This is very brief. Are you sure you are conveying all of the skills and attributes you want students to develop in this unit?"
-        },
-        {
-            "rule": [
-                {"var": "wordcount", "is": "above", "val": "180"}
-            ],
-            "message": "This is quite long: ideally these statements should be brief and to the point. Check the level of detail you are including."
-        },
-        {
-            "rule": [
-                {"var": "readability", "is": "above", "val": "60"}
-            ],
-            "message": "Your outcomes are simply written and direct. This readability level will be suitable for all of your students."
-        },
-        {
-            "rule": [
-                {"var": "readability", "is": "range", "val": ["30", "60"]}
-            ],
-            "message": "Your outcomes are written at a level appropriate for university students. Bear in mind that your students will have a range of levels of fluency in English."
-        },
-        {
-            "rule": [
-                {"var": "readability", "is": "below", "val": "30"}
-            ],
-            "message": "Your outcomes are written at a level suitable for university graduates. Given your students will have a range of levels of fluency in English, you may want to see if you can simplify the wording without damaging your intended meaning."
-        },
-        {
-            "rule": [
-                {"var": "repetition", "is": "equal", "val": "1"}
-            ],
-            "message": "You seem to use the word __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
-        },
-        {
-            "rule": [
-                {"var": "repetition", "is": "above", "val": "1"}
-            ],
-            "message": "You seem to use the words __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
-        }
+    "word_flagged": [
+            "understand"
     ]
 };

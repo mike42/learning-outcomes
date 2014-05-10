@@ -204,21 +204,77 @@ function metric_repetition(sentences) {
     return ret;
 }
 
+/**
+ * 
+ * @param sentences
+ * @returns {Array}
+ */
+function metric_flagged(sentences) {
+	// Construct associative array of all words
+    var list_f = {}, list_f_found = {};
+    var word_f = [];
+    var i, j, w;
+    
+    // Construct list of flagged words
+    for(i = 0; i < metric_parameters.word_flagged.length; i++)
+        list_f[metric_parameters.word_flagged[i]] = 1;
+
+    // Go ahead and count them
+	for(i = 0; i < sentences.length; i++) {
+		for(j = 0; j < sentences[i].length; j++) {
+            w = sentences[i][j][0];
+		    if(list_f[w] != undefined && list_f_found[w] == undefined) {
+		    	list_f_found[w] = 1;
+                word_f.push(w);
+            }
+		}
+	}
+	return word_f;
+}
+
+/**
+ * 
+ * @returns {Array} 
+ */
 function metric_example_lwords() {
-    // TODO return three example words as a string
-    return [];
+    var l = [];
+    l.push(metric_parameters.word_l.knowledge[rand(0, metric_parameters.word_l.knowledge.length - 1)]);
+    l.push(metric_parameters.word_l.comprehension[rand(0, metric_parameters.word_l.comprehension.length - 1)]);
+    l.push(metric_parameters.word_l.application[rand(0, metric_parameters.word_l.application.length - 1)]);
+    return l;
 }
 
+/**
+ * 
+ * @returns {Array}
+ */
 function metric_example_hwords() {
-    // TODO return three example words as a string
-    return [];
+    var h = [];
+    h.push(metric_parameters.word_h.analysis[rand(0, metric_parameters.word_h.analysis.length - 1)]);
+    h.push(metric_parameters.word_h.synthesis[rand(0, metric_parameters.word_h.synthesis.length - 1)]);
+    h.push(metric_parameters.word_h.evaluation[rand(0, metric_parameters.word_h.evaluation.length - 1)]);
+    return h;
 }
 
-function joinWords(words) {
-    // TODO join an array of English words into a sentence
-    return "";
+/**
+ * Join an array of English words into a good list (a, b and c).
+ * 
+ * @param words
+ * @param sep
+ * @returns
+ */
+function joinWords(words, sep) {
+	var a = '';
+	if(words.length > 1) {
+		a = ' ' + sep + ' ' + words.pop();
+	}	
+    return words.join(', ') + a;
 }
 
+/**
+ * 
+ * @param text
+ */
 function test(text) {
     $('#result').empty();
 
@@ -244,20 +300,30 @@ function test(text) {
 	console.log(repetition);
  	$('#result').append('Over-used words: ' + repetition.join(' ') + '<br/>');
 
+ 	var flagged = metric_flagged(passage);
+ 	$('#result').append('Flagged: ' + flagged.join(' ') + '<br/>');
+ 	
     var feedback = metric_provide_feedback({
         keyword_h: keywords.word_h,
         keyword_l: keywords.word_l,
+        keyword_f: flagged.length,
         wordcount: counts.totalWords,
         readability: readability,
         repetition: repetition.length,
         repWords: joinWords(repetition, 'and'),
         lWords: joinWords(metric_example_lwords(), 'or'),
-        hWords: joinWords(metric_example_hwords(), 'or') 
+        hWords: joinWords(metric_example_hwords(), 'or'),
+        fWords: joinWords(flagged, 'or')
     });
     
     $('#result').append("<p>" + feedback.join("</p></p>") + "</p>");
 }
 
+/**
+ * 
+ * @param variables
+ * @returns {Array}
+ */
 function metric_provide_feedback(variables) {
     var f = []; // Array of feedback strings
 
@@ -266,27 +332,113 @@ function metric_provide_feedback(variables) {
             f.push(metric_subst_feedback(metric_parameters.feedback[i].message, variables));
         }
     }
-
+    
     return f;
 }
 
+/**
+ * Determine whether feedback is applicable here (very generic matching of variables to rules)
+ * 
+ * @param feedback
+ * @param variables
+ * @returns {Boolean}
+ */
 function metric_match_feedback(feedback, variables) {
-    // TODO match feedback rule to variables
-    return true;
+	var i, match = true, v;
+	if(feedback.rule.length == 0) {
+		return 0;
+	}
+	
+	for(i = 0; i < feedback.rule.length; i++) {
+		/* Figure out which numeric variable to look at */
+		v = undefined;
+		switch(feedback.rule[i].var) {
+		case 'repetition':
+			v = variables.repetition;
+			break;
+		case 'flaggedword':
+			v = variables.keyword_f;
+			break;
+		case 'readability':
+			v = variables.readability;
+			break;
+		case 'wordcount':
+			v = variables.wordcount;
+			break;
+		case 'keyword_h':
+			v = variables.keyword_h;
+			break;
+		case 'keyword_l':
+			v = variables.keyword_l;
+			break;
+		default:
+			match = false;
+			continue;
+		}
+		if(!match) {
+			break;
+		}
+		
+		/* Compare it */
+		switch(feedback.rule[i].is) {
+		case 'above':
+			match = (v > feedback.rule[i].val);
+			break;
+		case 'below':
+			match = (v < feedback.rule[i].val);
+			break;
+		case 'equal':
+			match = (v == feedback.rule[i].val);
+			break;
+		case 'range': // Inclusive range
+			match = (v >= feedback.rule[i].val[0]) && (v <= feedback.rule[i].val[1]);
+			break;
+		default:
+			match = false;
+			continue;
+		}
+		
+		if(!match) {
+			break;
+		}
+	}
+	
+    return match;
 }
 
+/**
+ * 
+ * @param message
+ * @param variables
+ * @returns
+ */
 function metric_subst_feedback(message, variables) {
-    // TODO replace variables in message with values
-    //__REP_WORD__
-    //__HWORDS__
-    //__LWORDS__
+	message = message.replace("__REP_WORD__", variables.repWords);
+	message = message.replace("__HWORDS__", variables.hWords);
+	message = message.replace("__LWORDS__", variables.lWords);
+	message = message.replace("__BAD_WORD__", variables.fWords);
     return message;
 }
 
+/**
+ * Return keys of an array sorted by value, in reverse.
+ * @param obj
+ * @returns
+ */
 function objSortRev(obj) {
     var keys = [];
     for(var key in obj)
         keys.push(key);
     var sortedKeys = keys.sort(function(a,b){return obj[a]-obj[b]});
     return sortedKeys.reverse();
+}
+
+/**
+ * Quick random number function
+ * @param min
+ * @param max
+ * @returns random number between min and max
+ */
+function rand(min, max) {
+	return Math.floor((Math.random() * max) + min);
 }
