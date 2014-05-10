@@ -275,33 +275,33 @@ function joinWords(words, sep) {
  * 
  * @param text
  */
-function test(text) {
-    $('#result').empty();
+function testLearningOutcomeFeedback(text, destination) {
+	$(destination).empty();
 
 	var passage = metric_read_passage(text);
 	console.log(passage);
 	
 	var counts = metric_passage_wordcount(passage);
     console.log(counts);
-	$('#result').append('Words: ' + counts.totalWords + '<br/>');
-	$('#result').append('Sentences: ' + counts.totalSentences + '<br/>');
-	$('#result').append('Syllables: ' + counts.totalSyllables + '<br/>');
+    $(destination).append('Words: ' + counts.totalWords + '<br/>');
+    $(destination).append('Sentences: ' + counts.totalSentences + '<br/>');
+    $(destination).append('Syllables: ' + counts.totalSyllables + '<br/>');
 	
 	var readability = metric_passage_readability(counts.totalWords, counts.totalSentences, counts.totalSyllables);
 	console.log(readability);
-	$('#result').append('Readability score: ' + readability + '<br/>');
+	$(destination).append('Readability score: ' + readability + '<br/>');
 
 	var keywords = metric_passage_keywords(passage);
 	console.log(keywords);
-	$('#result').append('Lower order verbs: ' + keywords.word_l + '<br/>');
-	$('#result').append('Higher order verbs: ' + keywords.word_h + '<br/>');
+	$(destination).append('Lower order verbs: ' + keywords.word_l + '<br/>');
+	$(destination).append('Higher order verbs: ' + keywords.word_h + '<br/>');
 	
 	var repetition = metric_repetition(passage);
 	console.log(repetition);
- 	$('#result').append('Over-used words: ' + repetition.join(' ') + '<br/>');
+	$(destination).append('Over-used words: ' + repetition.join(' ') + '<br/>');
 
  	var flagged = metric_flagged(passage);
- 	$('#result').append('Flagged: ' + flagged.join(' ') + '<br/>');
+ 	$(destination).append('Flagged: ' + flagged.join(' ') + '<br/>');
  	
     var feedback = metric_provide_feedback({
         keyword_h: keywords.word_h,
@@ -316,7 +316,34 @@ function test(text) {
         fWords: joinWords(flagged, 'or')
     });
     
-    $('#result').append("<p>" + feedback.join("</p></p>") + "</p>");
+    $(destination).append("<p>" + feedback.join("</p></p>") + "</p>");
+}
+
+function getLearningOutcomeFeedback(text, destination) {
+	   $(destination).empty();
+		var passage = metric_read_passage(text);
+		if(passage.length == 0) {
+			$(destination).append("<p>" + metric_parameters.empty_message + "</p>");
+			return;
+		}
+		var counts = metric_passage_wordcount(passage);
+		var readability = metric_passage_readability(counts.totalWords, counts.totalSentences, counts.totalSyllables);
+		var keywords = metric_passage_keywords(passage);
+		var repetition = metric_repetition(passage);
+		var flagged = metric_flagged(passage);	
+	    var feedback = metric_provide_feedback({
+	        keyword_h: keywords.word_h,
+	        keyword_l: keywords.word_l,
+	        keyword_f: flagged.length,
+	        wordcount: counts.totalWords,
+	        readability: readability,
+	        repetition: repetition.length,
+	        repWords: joinWords(repetition, 'and'),
+	        lWords: joinWords(metric_example_lwords(), 'or'),
+	        hWords: joinWords(metric_example_hwords(), 'or'),
+	        fWords: joinWords(flagged, 'or')
+	    });
+	    $(destination).append("<p>" + feedback.join("</p></p>") + "</p>");
 }
 
 /**

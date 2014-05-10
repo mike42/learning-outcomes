@@ -77,6 +77,7 @@ var metric_parameters = {
             "message": "You can't use the word __BAD_WORD__."
         }
     ],
+    "empty_message": "Please paste learning outcomes for your unit into the box to check them",
     "word_l": {
         "knowledge": [
             "arrange",
@@ -239,6 +240,6 @@ var metric_parameters = {
         ],
     },
     "word_flagged": [
-            "understand"
+            "understand",
     ]
 };

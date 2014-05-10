@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Outcome Tool</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+/* Per branding guide */
+.section {
+	font-size: 70%;
+	float: left;
+	width: 100%;
+	padding: 0;
+	height: 50px;
+	position: relative;
+	background: #32659c;
+}
+
+.section .arrow {
+	position: absolute;
+	width: 27px;
+	height: 14px;
+	bottom: -14px;
+	background: url(css/sectionarrow.png) no-repeat 0 0;
+	left: 2.04%;
+	z-index: 1;
+}
+
+.section p {
+	float: left;
+	width: 96%;
+	font-size: 1.6em;
+	color: #fff;
+	font-weight: bold;
+	padding: 0 2%;
+	line-height: 50px;
+}
+
+.info-panel {
+	padding-top: 20px;
+	background-color: #f5f6f6;
+	border-right: 4px solid #32659C;
+}
+
+.form-panel {
+	padding-top: 10px;
+}
+
+#feedback-panel {
+	margin-top: 3em;
+}
+
+html,body,div,.btn,.form-control {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000;
+}
+</style>
+<body>
+	<div class="container">
+		<h1>Example page</h1>
+		<div class="row">
+			<div class="section">
+				<p>Improving Learning Outcomes</p>
+				<div class="arrow"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 info-panel">
+				<h4>Lorem Ipsum</h4>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+					justo tortor, porttitor sit amet sodales id, consectetur at nulla.</p>
+				<p>Quisque vel scelerisque nulla. Vestibulum congue, metus ac
+					vestibulum facilisis, lorem leo volutpat magna, et venenatis metus
+					neque eget mauris. Nam eget adipiscing libero. Sed orci nisl,
+					dictum vitae enim a, vehicula sollicitudin dui.</p>
+				<h4>Ancora Imparo</h4>
+				<p>Vivamus pretium hendrerit odio. Nunc interdum a velit sed
+					tempor. Suspendisse vitae malesuada arcu. Quisque non nunc urna.
+					Donec aliquet sem id egestas viverra.</p>
+				<p>Praesent eleifend nibh at pretium varius. Pellentesque vel
+					tellus at neque dictum luctus non ut libero. Praesent sodales
+					ullamcorper vestibulum. Sed varius mauris turpis, non sagittis sem
+					cursus vel.</p>
+			</div>
+			<div class="col-sm-6 form-panel">
+				<div class="form-group">
+					<textarea class="form-control" style="resize: none" rows=8
+						placeholder="Enter your learning outcomes here." id="txtOutcome"></textarea>
+					<div class="wrapper">
+						<button class="btn btn-default pull-right" id="checkOutcomes">Check</button>
+					</div>
+				</div>
+				<div class="well" id="feedback-panel" style="display: none">..</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/metric-parameters.js"></script>
+	<script src="js/metrics.js"></script>
+	<script type="text/javascript">
+		$('#checkOutcomes').on('click', function() {
+			$('#feedback-panel').hide();
+			getLearningOutcomeFeedback($('#txtOutcome').val(), '#feedback-panel');
+			$('#feedback-panel').fadeIn(400);
+		})
+	</script>
+</body>
+</html>
