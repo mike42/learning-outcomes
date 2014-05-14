@@ -74,10 +74,11 @@ var metric_parameters = {
             "rule": [
                 {"var": "flaggedword", "is": "above", "val": "0"}
             ],
-            "message": "You can't use the word __BAD_WORD__."
+            "message": "&quot;__BAD_WORD__&quot; is a very general word. Can you be more specific about what skills you want your students to build?"
         }
     ],
     "empty_message": "Please paste learning outcomes for your unit into the box to check them",
+
     "word_l": {
         "knowledge": [
             "arrange",
@@ -241,5 +242,44 @@ var metric_parameters = {
     },
     "word_flagged": [
             "understand",
+    ],
+    "skill" : [
+       {
+            "name": "management and leadership",
+            "list": []
+        },
+        {
+            "name": "research",
+            "list": []
+        },
+        {
+            "name": "communication",
+            "list": []
+        },
+        {
+            "name": "technical",
+            "list": []
+        },
+        {
+            "name": "teaching",
+            "list": []
+        },
+        {
+            "name": "financial",
+            "list": []
+        },
+        {
+            "name": "creative",
+            "list": []
+        },
+        {
+            "name": "helping",
+            "list": []
+        },
+        {
+            "name": "detail",
+            "list": []
+        }
+
     ]
 };
