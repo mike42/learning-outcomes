@@ -448,6 +448,7 @@ function metric_subst_feedback(message, variables) {
 	message = message.replace("__HWORDS__", variables.hWords);
 	message = message.replace("__LWORDS__", variables.lWords);
 	message = message.replace("__BAD_WORD__", variables.fWords);
+	message = message.replace("__WC__", variables.wordcount);
     return message;
 }
 

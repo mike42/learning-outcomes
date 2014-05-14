@@ -2,6 +2,12 @@ var metric_parameters = {
     "feedback": [
         {
             "rule": [
+                {"var": "wordcount", "is": "above", "val": "0"}
+            ],
+            "message": "Word count: __WC__."
+        },
+        {
+            "rule": [
                 {"var": "keyword_h", "is": "equal", "val": "0"},
                 {"var": "keyword_l", "is": "equal", "val": "0"}
             ],
@@ -27,18 +33,6 @@ var metric_parameters = {
                 {"var": "keyword_l", "is": "above", "val": "0"}
             ],
             "message": "You are using verbs that will help students understand the skills you are expecting them to develop over the course of this unit."
-        },
-        {
-            "rule": [
-                {"var": "wordcount", "is": "below", "val": "40"}
-            ],
-            "message": "This is very brief. Are you sure you are conveying all of the skills and attributes you want students to develop in this unit?"
-        },
-        {
-            "rule": [
-                {"var": "wordcount", "is": "above", "val": "180"}
-            ],
-            "message": "This is quite long: ideally these statements should be brief and to the point. Check the level of detail you are including."
         },
         {
             "rule": [
