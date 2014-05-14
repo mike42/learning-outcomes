@@ -11,28 +11,28 @@ var metric_parameters = {
                 {"var": "keyword_h", "is": "equal", "val": "0"},
                 {"var": "keyword_l", "is": "equal", "val": "0"}
             ],
-            "message": "Check that you are using active verbs in your outcome that will communicate to your students what skills you are expecting them to demonstrate in completing this unit. Think about comprehension based skills like __LWORDS__, as well as higher order skills like __HWORDS__."
+            "message": "Check that you are using active verbs in your outcome that will communicate to your students what skills you are expecting them to demonstrate in completing this unit. Think about comprehension based skills like __LWORDS__, as well as higher order skills like __HWORDS__?"
         },
         {
             "rule": [
                 {"var": "keyword_h", "is": "above", "val": "0"},
                 {"var": "keyword_l", "is": "equal", "val": "0"}
             ],
-            "message": "You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__."
+            "message": "You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__?"
         },
         {
             "rule": [
                 {"var": "keyword_h", "is": "equal", "val": "0"},
                 {"var": "keyword_l", "is": "above", "val": "0"}
             ],
-            "message": "You are doing a good job describing the comprehension and retention level outcomes you want your students to achieve. Do you want your students to undertake higher level thinking as well, like __HWORDS__?"
+            "message": "Your choice of verbs shows you want to build your students’ retention and comprehension skills. Did you also want to look at higher order thinking skills like __HWORDS__?"
         },
         {
             "rule": [
                 {"var": "keyword_h", "is": "above", "val": "0"},
                 {"var": "keyword_l", "is": "above", "val": "0"}
             ],
-            "message": "You are using verbs that will help students understand the skills you are expecting them to develop over the course of this unit."
+            "message": "Your verb selection shows you are expecting your students to develop a balance of both higher and lower order thinking skills."
         },
         {
             "rule": [
@@ -44,7 +44,7 @@ var metric_parameters = {
             "rule": [
                 {"var": "readability", "is": "range", "val": ["30", "60"]}
             ],
-            "message": "Your outcomes are written at a level appropriate for university students. Bear in mind that your students will have a range of levels of fluency in English."
+            "message": "Your outcomes are written at a level appropriate for university students. Bear in mind that your students will have a range of levels of fluency in English, and you should keep this in mind when writing."
         },
         {
             "rule": [
@@ -78,9 +78,21 @@ var metric_parameters = {
         },
         {
             "rule": [
-                {"var": "employability", "is": "above", "val": "0"}
+                {"var": "employability", "is": "equal", "val": "1"}
             ],
-            "message": "WYour verb choices reflect important employability skills in the area of __SKILLNAME__."
+            "message": "Your verb choices reflect important employability skills in the area of __SKILLNAME__."
+        },
+        {
+            "rule": [
+                {"var": "employability", "is": "above", "val": "1"}
+            ],
+            "message": "Your verb choices reflect important employability skills in the areas of __SKILLNAME__."
+        },
+        {
+        	"rule": [
+        	    {"var": "solonum", "is": "above", "val": "0"}
+        	],
+        	"message": "Your verb choices reflect the __SOLOLEVEL__ level of the SOLO taxonomy"
         }
     ],
     "empty_message": "Please paste learning outcomes for your unit into the box to check them",
@@ -99,10 +111,12 @@ var metric_parameters = {
             "list",
             "locate",
             "memorize",
+            "memorise",
             "name",
             "order",
             "quote",
             "recall",
+            "recognise",
             "recognize",
             "relate",
             "repeat",
@@ -133,6 +147,7 @@ var metric_parameters = {
             "restate",
             "review",
             "summarize",
+            "summarise",
             "tell"
         ],
         "application": [
@@ -163,16 +178,17 @@ var metric_parameters = {
     "word_h": {
         "analysis": [
             "analyze",
-            "appraise",
-            "analyze",
+            "analyse",
             "appraise",
             "arrange",
             "calculate",
+            "categorise",
             "categorize",
             "classify",
             "compare",
             "connect",
             "contrast",
+            "criticise",
             "criticize",
             "deconstruct",
             "differentiate",
@@ -182,6 +198,7 @@ var metric_parameters = {
             "explain",
             "infer",
             "order",
+            "organise",
             "organize",
             "outline",
             "question",
@@ -199,12 +216,14 @@ var metric_parameters = {
             "develop",
             "explain",
             "formulate",
+            "generalise",
             "generalize",
             "integrate",
             "invent",
             "make",
             "manage",
             "modify",
+            "organise",
             "organize",
             "plan",
             "prepare",
@@ -234,12 +253,14 @@ var metric_parameters = {
             "justify",
             "measure",
             "predict",
+            "prioritise",
             "prioritize",
             "prove",
             "rank",
             "rate",
             "recommend",
             "select",
+            "summarise",
             "summarize",
             "support",
             "test",
@@ -251,13 +272,15 @@ var metric_parameters = {
     ],
     "skill" : [
        {
-            "name": "management and leadership",
+            "name": "management/leadership",
             "list": [
                 "administer",
                 "analyse",
+                "analyze",
                 "appoint",
                 "approve",
                 "assign",
+                "authorise",
                 "authorize",
                 "chair",
                 "consider",
@@ -271,6 +294,7 @@ var metric_parameters = {
                 "develop",
                 "direct",
                 "eliminate",
+                "emphasise",
                 "emphasize",
                 "enforce",
                 "enhance",
@@ -291,13 +315,16 @@ var metric_parameters = {
                 "manage",
                 "merge",
                 "motivate",
+                "organise",
                 "organize",
                 "originate",
                 "overhaul",
                 "oversee",
                 "plan",
+                "prioritise",
                 "prioritize",
                 "recommend",
+                "reorganise",
                 "reorganize",
                 "replace",
                 "restore",
@@ -306,6 +333,7 @@ var metric_parameters = {
                 "streamline",
                 "strengthen",
                 "supervise",
+                "supervize",
                 "write"
             ]
         },
@@ -313,6 +341,7 @@ var metric_parameters = {
             "name": "research",
             "list": [
 	            "analyze",
+	            "analyse",
 	            "clarify",
 	            "collect",
 	            "compare",
@@ -336,13 +365,16 @@ var metric_parameters = {
 	            "investigate",
 	            "locate",
 	            "measure",
+	            "organise",
 	            "organize",
 	            "research",
 	            "review",
 	            "search",
 	            "solve",
+	            "summarise",
 	            "summarize",
 	            "survey",
+	            "systematise",
 	            "systematize",
 	            "test"
             ]
@@ -402,6 +434,7 @@ var metric_parameters = {
 	            "present",
 	            "promote",
 	            "propose",
+	            "publicise",
 	            "publicize",
 	            "reconcile",
 	            "recruit",
@@ -414,7 +447,9 @@ var metric_parameters = {
 	            "specify",
 	            "speak",
 	            "suggest",
+	            "summarise",
 	            "summarize",
+	            "synthesise",
 	            "synthesize",
 	            "translate",
 	            "write"
@@ -448,9 +483,11 @@ var metric_parameters = {
 	            "replace",
 	            "restore",
 	            "solve",
+	            "specialised",
 	            "specialized",
 	            "train",
 	            "upgrade",
+	            "utilise",
 	            "utilize"
             ]
         },
@@ -473,6 +510,7 @@ var metric_parameters = {
 	            "explain",
 	            "facilitate",
 	            "guide",
+	            "individualise",
 	            "individualize",
 	            "inform",
 	            "initiate",
@@ -497,6 +535,7 @@ var metric_parameters = {
 	            "approve",
 	            "arrange",
 	            "catalogue",
+	            "categorise",
 	            "categorize",
 	            "charter",
 	            "classify",
@@ -516,6 +555,7 @@ var metric_parameters = {
 	            "monitor",
 	            "operate",
 	            "order",
+	            "organise",
 	            "organize",
 	            "purchase",
 	            "review",
@@ -529,6 +569,7 @@ var metric_parameters = {
 	            "administer",
 	            "allocate",
 	            "analyse",
+	            "analyze",
 	            "appraise",
 	            "assess",
 	            "audit",
@@ -559,9 +600,11 @@ var metric_parameters = {
 	            "adapt",
 	            "begin",
 	            "combine",
+	            "conceptualise",
 	            "conceptualize",
 	            "condense",
 	            "create",
+	            "customise",
 	            "customize",
 	            "design",
 	            "develop",
@@ -586,6 +629,7 @@ var metric_parameters = {
 	            "photograph",
 	            "plan",
 	            "revise",
+	            "revitalise",
 	            "revitalize",
 	            "shape",
 	            "solve"
@@ -615,6 +659,7 @@ var metric_parameters = {
 	            "ensure",
 	            "expedite",
 	            "facilitate",
+	            "familiarise",
 	            "familiarize",
 	            "guide",
 	            "help",
@@ -638,6 +683,7 @@ var metric_parameters = {
 	            "approve",
 	            "arrange",
 	            "catalogue",
+	            "categorise",
 	            "categorize",
 	            "chart",
 	            "classify",
@@ -658,6 +704,7 @@ var metric_parameters = {
 	            "obtain",
 	            "operate",
 	            "order",
+	            "organise",
 	            "organize",
 	            "prepare",
 	            "process",
@@ -674,13 +721,131 @@ var metric_parameters = {
 	            "set up",
 	            "submit",
 	            "supply",
+	            "standardise",
 	            "standardize",
+	            "systematise",
 	            "systematize",
 	            "update",
 	            "validate",
 	            "verify"
             ]
         }
-
+    ],
+    "solo": [
+        {
+            "name": "uni-structural",
+            "list":  [
+			    "define",
+			    "draw",
+			    "find",
+			    "identify",
+			    "label",
+			    "match",
+			    "name",
+			    "note",
+			    "quote",
+			    "recall",
+			    "recognise",
+			    "recognize",
+			    "state",
+			    "tell",
+			    "transmit"
+            ]
+        },
+        {
+            "name": "multi-structural",
+            "list":  [
+			    "clarify",
+			    "define",
+			    "describe",
+			    "examine",
+			    "explain",
+			    "extend",
+			    "follow a procedure",
+			    "interpret",
+			    "list",
+			    "outline",
+			    "revise",
+			    "revize",
+			    "rework",
+			    "solve",
+			    "symbolise",
+			    "symbolize"
+            ]
+        },
+        {
+            "name": "relational",
+            "list":  [
+			    "analyse",
+			    "analyze",
+			    "apply",
+			    "appraise",
+			    "categorise",
+			    "categorize",
+			    "classify",
+			    "combine",
+			    "compare",
+			    "contrast",
+			    "demonstrate",
+			    "distinguish",
+			    "evaluate",
+			    "explain causes",
+			    "explain effects",
+			    "inquire",
+			    "interview",
+			    "make an analogy",
+			    "map",
+			    "observe",
+			    "organise",
+			    "organize",
+			    "outline",
+			    "perform",
+			    "predict",
+			    "question",
+			    "sequence",
+			    "summarise",
+			    "summarize"
+            ]
+        },
+        {
+            "name": "extended abstract",
+            "list":  [
+			    "appreciate",
+			    "deep understanding",
+			    "argue",
+			    "assess",
+			    "compose",
+			    "construct",
+			    "create",
+			    "debate",
+			    "design",
+			    "develop",
+			    "evaluate",
+			    "generalise",
+			    "generalize",
+			    "generate",
+			    "hypothesise",
+			    "hypothesize",
+			    "invent",
+			    "justify",
+			    "originate",
+			    "perform",
+			    "plan",
+			    "predict",
+			    "prioritise",
+			    "prioritize",
+			    "prove",
+			    "reflect",
+			    "synthesise",
+			    "synthesize",
+			    "theorise",
+			    "theorize",
+			    "validate",
+			    "value",
+			    "judge",
+			    "visualise",
+			    "visualize"
+            ]
+        }
     ]
 };

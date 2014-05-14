@@ -205,6 +205,7 @@ function metric_repetition(sentences) {
 }
 
 /**
+ * Get flagged words
  * 
  * @param sentences
  * @returns {Array}
@@ -233,6 +234,7 @@ function metric_flagged(sentences) {
 }
 
 /**
+ * Get lower order thinking words as examples
  * 
  * @returns {Array} 
  */
@@ -245,7 +247,7 @@ function metric_example_lwords() {
 }
 
 /**
- * 
+ * Get higher order thinking words as examples
  * @returns {Array}
  */
 function metric_example_hwords() {
@@ -254,6 +256,77 @@ function metric_example_hwords() {
     h.push(metric_parameters.word_h.synthesis[rand(0, metric_parameters.word_h.synthesis.length - 1)]);
     h.push(metric_parameters.word_h.evaluation[rand(0, metric_parameters.word_h.evaluation.length - 1)]);
     return h;
+}
+
+/**
+ * Find employability words
+ * 
+ * @param passsage
+ * @returns
+ */
+function metric_employability(sentences) {
+	var s_list = [];
+	var s_word = {};
+	var add;
+	for(k = 0; k < metric_parameters.skill.length; k++) {
+		// Check each skill
+		s_word = {};
+		add = false;
+		for(i = 0; i < metric_parameters.skill[k].list.length; i++) {
+			s_word[metric_parameters.skill[k].list[i]] = 1;
+		}
+
+		for(i = 0; i < sentences.length; i++) {
+			for(j = 0; j < sentences[i].length; j++) {
+				w = sentences[i][j][0];
+				if(s_word[w] != undefined) {
+					add = true;
+				}
+			}
+		}
+		
+		if(add) {
+			s_list.push(metric_parameters.skill[k].name);
+		}
+	}
+	return {num: s_list.length, skill: s_list};
+}
+
+/**
+ * Find SOLO taxonomy keywords
+ * 
+ * @param passsage
+ * @returns
+ */
+function metric_solo(sentences) {
+	var s_list = [];
+	var s_word = {};
+	var add;
+	for(k = 0; k < metric_parameters.solo.length; k++) {
+		// Check each SOLO level
+		s_word = {};
+		add = false;
+		for(i = 0; i < metric_parameters.solo[k].list.length; i++) {
+			s_word[metric_parameters.solo[k].list[i]] = 1;
+		}
+
+		for(i = 0; i < sentences.length; i++) {
+			for(j = 0; j < sentences[i].length; j++) {
+				w = sentences[i][j][0];
+				if(s_word[w] != undefined) {
+					add = true;
+				}
+			}
+		}
+		
+		if(add) {
+			s_list.push(metric_parameters.solo[k].name);
+		}
+	}
+	if(s_list.length > 0) {
+		return {num: '1', level: s_list.pop()};
+	}
+	return {num: '0', level: ''};
 }
 
 /**
@@ -303,6 +376,14 @@ function testLearningOutcomeFeedback(text, destination) {
  	var flagged = metric_flagged(passage);
  	$(destination).append('Flagged: ' + flagged.join(' ') + '<br/>');
  	
+	var solo = metric_solo(passage);
+	$(destination).append('Has SOLO taxonomy words?: ' + solo.num + '<br/>');
+	$(destination).append('SOLO taxonomy level: ' + solo.level + '<br/>');
+	
+	var employability = metric_employability(passage);
+	$(destination).append('Employability skill area count: ' + employability.num + '<br/>');
+	$(destination).append('Employability skill areas: ' + joinWords(employability.skill, 'and') + '<br/>');
+ 	
     var feedback = metric_provide_feedback({
         keyword_h: keywords.word_h,
         keyword_l: keywords.word_l,
@@ -313,7 +394,11 @@ function testLearningOutcomeFeedback(text, destination) {
         repWords: joinWords(repetition, 'and'),
         lWords: joinWords(metric_example_lwords(), 'or'),
         hWords: joinWords(metric_example_hwords(), 'or'),
-        fWords: joinWords(flagged, 'or')
+        fWords: joinWords(flagged, 'or'),
+        employability: employability.num,
+        skill: joinWords(employability.skill, 'and'),
+        solonum: solo.num,
+        sololvl: solo.level
     });
     
     if(passage.length == 0) {
@@ -334,7 +419,10 @@ function getLearningOutcomeFeedback(text, destination) {
 		var readability = metric_passage_readability(counts.totalWords, counts.totalSentences, counts.totalSyllables);
 		var keywords = metric_passage_keywords(passage);
 		var repetition = metric_repetition(passage);
-		var flagged = metric_flagged(passage);	
+		var flagged = metric_flagged(passage);
+		var solo = metric_solo(passage);
+		var employability = metric_employability(passage);
+		
 	    var feedback = metric_provide_feedback({
 	        keyword_h: keywords.word_h,
 	        keyword_l: keywords.word_l,
@@ -345,7 +433,11 @@ function getLearningOutcomeFeedback(text, destination) {
 	        repWords: joinWords(repetition, 'and'),
 	        lWords: joinWords(metric_example_lwords(), 'or'),
 	        hWords: joinWords(metric_example_hwords(), 'or'),
-	        fWords: joinWords(flagged, 'or')
+	        fWords: joinWords(flagged, 'or'),
+	        employability: employability.num,
+	        skill: joinWords(employability.skill, 'and'),
+	        solonum: solo.num,
+	        sololvl: solo.level
 	    });
 	    $(destination).append("<p>" + feedback.join("</p></p>") + "</p>");
 }
@@ -402,6 +494,12 @@ function metric_match_feedback(feedback, variables) {
 		case 'keyword_l':
 			v = variables.keyword_l;
 			break;
+		case 'solonum':
+			v = variables.solonum;
+			break;
+		case 'employability':
+			v = variables.employability;
+			break;
 		default:
 			match = false;
 			continue;
@@ -449,6 +547,8 @@ function metric_subst_feedback(message, variables) {
 	message = message.replace("__LWORDS__", variables.lWords);
 	message = message.replace("__BAD_WORD__", variables.fWords);
 	message = message.replace("__WC__", variables.wordcount);
+	message = message.replace("__SKILLNAME__", variables.skill);
+	message = message.replace("__SOLOLEVEL__", variables.sololvl);
     return message;
 }
 
