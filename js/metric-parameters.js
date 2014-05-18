@@ -60,13 +60,7 @@ var metric_parameters = {
         },
         {
             "rule": [
-                {"var": "employability", "is": "equal", "val": "1"}
-            ],
-            "message": "<b>Employability Skills</b><br/> Your verb choices reflect important employability skills in the area of __SKILLNAME__."
-        },
-        {
-            "rule": [
-                {"var": "employability", "is": "above", "val": "1"}
+                {"var": "employability", "is": "above", "val": "0"}
             ],
             "message": "<b>Employability Skills</b><br/> Your verb choices reflect __SKILLNAME__ skills."
         },
@@ -74,7 +68,7 @@ var metric_parameters = {
         	"rule": [
         	    {"var": "solonum", "is": "above", "val": "0"}
         	],
-        	"message": "<b>SOLO Taxonomy</b><br/> Your verb choices reflect the __SOLOLEVEL__ level of the SOLO taxonomy"
+        	"message": "<b>SOLO Taxonomy</b><br/> Your verb choices reflect the <b>__SOLOLEVEL__</b> level of the SOLO taxonomy"
         },
         {
             "rule": [
@@ -86,13 +80,13 @@ var metric_parameters = {
             "rule": [
                 {"var": "repetition", "is": "equal", "val": "1"}
             ],
-            "message": "You seem to use the word __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+            "message": "You seem to use the word <b>__REP_WORD__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
         },
         {
             "rule": [
                 {"var": "repetition", "is": "above", "val": "1"}
             ],
-            "message": "You seem to use the words __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+            "message": "You seem to use the words <b>__REP_WORD__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
         }
     ],
     "empty_message": "Please paste learning outcomes for your unit into the box to check them",
