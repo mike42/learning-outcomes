@@ -56,9 +56,6 @@
 	padding-top: 10px;
 }
 
-#feedback-panel {
-	margin-top: 3em;
-}
 
 html,body,div,.btn,.form-control {
 	font-family: Arial, Helvetica, sans-serif;
@@ -76,30 +73,21 @@ html,body,div,.btn,.form-control {
 		</div>
 		<div class="row">
 			<div class="col-sm-6 info-panel">
-				<h4>Lorem Ipsum</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-					justo tortor, porttitor sit amet sodales id, consectetur at nulla.</p>
-				<p>Quisque vel scelerisque nulla. Vestibulum congue, metus ac
-					vestibulum facilisis, lorem leo volutpat magna, et venenatis metus
-					neque eget mauris. Nam eget adipiscing libero. Sed orci nisl,
-					dictum vitae enim a, vehicula sollicitudin dui.</p>
-				<h4>Ancora Imparo</h4>
-				<p>Vivamus pretium hendrerit odio. Nunc interdum a velit sed
-					tempor. Suspendisse vitae malesuada arcu. Quisque non nunc urna.
-					Donec aliquet sem id egestas viverra.</p>
-				<p>Praesent eleifend nibh at pretium varius. Pellentesque vel
-					tellus at neque dictum luctus non ut libero. Praesent sodales
-					ullamcorper vestibulum. Sed varius mauris turpis, non sagittis sem
-					cursus vel.</p>
-			</div>
-			<div class="col-sm-6 form-panel">
-				<div class="form-group">
-					<textarea class="form-control" style="resize: none" rows=8
-						placeholder="Enter your learning outcomes here." id="txtOutcome"></textarea>
+				<p>This tool is designed to help you check the wording of your learning outcomes.
+                In the text box below, paste the learning outcomes for your unit, either all together
+                or one at a time. The tool will then generate feedback to help you reflect on how your
+                outcome is worded. The tool will check for word count, readability, thinking skills,
+                employability skills, and other aspects.
+                </p>
+			    <div class="form-group">
+			    	<textarea class="form-control" style="resize: none" rows=8
+			    		placeholder="Enter your learning outcomes here." id="txtOutcome"></textarea>
 					<div class="wrapper">
 						<button class="btn btn-default pull-right" id="checkOutcomes">Check</button>
 					</div>
-				</div>
+			    </div>
+            </div>
+			<div class="col-sm-6 form-panel">
 				<div class="well" id="feedback-panel" style="display: none">..</div>
 			</div>
 		</div>
