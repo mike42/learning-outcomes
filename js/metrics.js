@@ -391,12 +391,12 @@ function testLearningOutcomeFeedback(text, destination) {
         wordcount: counts.totalWords,
         readability: readability,
         repetition: repetition.length,
-        repWords: joinWords(repetition, 'and'),
-        lWords: joinWords(metric_example_lwords(), 'or'),
-        hWords: joinWords(metric_example_hwords(), 'or'),
+        repWords: joinWords(boldList(repetition), 'and'),
+        lWords: joinWords(boldList(metric_example_lwords()), 'or'),
+        hWords: joinWords(boldList(metric_example_hwords()), 'or'),
         fWords: joinWords(flagged, 'or'),
         employability: employability.num,
-        skill: joinWords(employability.skill, 'and'),
+        skill: joinWords(boldList(employability.skill), 'and'),
         solonum: solo.num,
         sololvl: solo.level
     });
@@ -430,17 +430,31 @@ function getLearningOutcomeFeedback(text, destination) {
 	        wordcount: counts.totalWords,
 	        readability: readability,
 	        repetition: repetition.length,
-	        repWords: joinWords(repetition, 'and'),
-	        lWords: joinWords(metric_example_lwords(), 'or'),
-	        hWords: joinWords(metric_example_hwords(), 'or'),
+	        repWords: joinWords(boldList(repetition), 'and'),
+	        lWords: joinWords(boldList(metric_example_lwords()), 'or'),
+	        hWords: joinWords(boldList(metric_example_hwords()), 'or'),
 	        fWords: joinWords(flagged, 'or'),
 	        employability: employability.num,
-	        skill: joinWords(employability.skill, 'and'),
+	        skill: joinWords(boldList(employability.skill), 'and'),
 	        solonum: solo.num,
 	        sololvl: solo.level
 	    });
 	    $(destination).append("<p>" + feedback.join("</p></p>") + "</p>");
 }
+
+
+/**
+ * Return list with each element encapsulated by <b></b> tags.
+ **/
+function boldList(list) {
+    var n = [];
+    var i;
+    for(i = 0; i < list.length; i++) {
+        n.push('<b>' + list[i] + '</b>');
+    }
+    return n;
+}
+
 
 /**
  * 

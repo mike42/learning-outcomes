@@ -68,7 +68,7 @@ var metric_parameters = {
             "rule": [
                 {"var": "flaggedword", "is": "above", "val": "0"}
             ],
-            "message": "&quot;__BAD_WORD__&quot; is a very general word. Can you be more specific about what skills you want your students to build?"
+            "message": "&quot;Understand&quot; is a very general word. Can you be more specific about what skills you want your students to build?"
         },
         {
             "rule": [
