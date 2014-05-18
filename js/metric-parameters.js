@@ -4,53 +4,83 @@ var metric_parameters = {
             "rule": [
                 {"var": "wordcount", "is": "above", "val": "0"}
             ],
-            "message": "Word count: __WC__."
+            "message": "<b>Word count:</b> __WC__."
         },
         {
             "rule": [
                 {"var": "keyword_h", "is": "equal", "val": "0"},
                 {"var": "keyword_l", "is": "equal", "val": "0"}
             ],
-            "message": "Check that you are using active verbs in your outcome that will communicate to your students what skills you are expecting them to demonstrate in completing this unit. Think about comprehension based skills like __LWORDS__, as well as higher order skills like __HWORDS__?"
+            "message": "<b>Thinking Skills</b><br/> Check that you are using active verbs in your outcome that will communicate to your students what skills you are expecting them to demonstrate in completing this unit. Think about comprehension based skills like __LWORDS__, as well as higher order skills like __HWORDS__?"
         },
         {
             "rule": [
                 {"var": "keyword_h", "is": "above", "val": "0"},
                 {"var": "keyword_l", "is": "equal", "val": "0"}
             ],
-            "message": "You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__?"
+            "message": "<b>Thinking Skills</b><br/> You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__?"
         },
         {
             "rule": [
                 {"var": "keyword_h", "is": "equal", "val": "0"},
                 {"var": "keyword_l", "is": "above", "val": "0"}
             ],
-            "message": "Your choice of verbs shows you want to build your students’ retention and comprehension skills. Did you also want to look at higher order thinking skills like __HWORDS__?"
+            "message": "<b>Thinking Skills</b><br/> Your choice of verbs shows you want to build your students’ retention and comprehension skills. Did you also want to look at higher order thinking skills like __HWORDS__?"
         },
         {
             "rule": [
                 {"var": "keyword_h", "is": "above", "val": "0"},
                 {"var": "keyword_l", "is": "above", "val": "0"}
             ],
-            "message": "Your verb selection shows you are expecting your students to develop a balance of both higher and lower order thinking skills."
+            "message": "<b>Thinking Skills</b><br/> Your verb selection shows you are expecting your students to develop a balance of both higher and lower order thinking skills."
         },
         {
             "rule": [
                 {"var": "readability", "is": "above", "val": "60"}
             ],
-            "message": "Your outcomes are simply written and direct. This readability level will be suitable for all of your students."
+            "message": "<b>Readability</b><br/> Your outcomes are simply written and direct. This readability level will be suitable for all of your students."
         },
         {
             "rule": [
                 {"var": "readability", "is": "range", "val": ["30", "60"]}
             ],
-            "message": "Your outcomes are written at a level appropriate for university students. Bear in mind that your students will have a range of levels of fluency in English, and you should keep this in mind when writing."
+            "message": "<b>Readability</b><br/> Your outcomes are written at a level appropriate for university students. Bear in mind that your students will have a range of levels of fluency in English, and you should keep this in mind when writing."
         },
         {
             "rule": [
                 {"var": "readability", "is": "below", "val": "30"}
             ],
-            "message": "Your outcomes are written at a level suitable for university graduates. Given your students will have a range of levels of fluency in English, you may want to see if you can simplify the wording without damaging your intended meaning."
+            "message": "<b>Readability</b><br/> Your outcomes are written at a level suitable for university graduates. Given your students will have a range of levels of fluency in English, you may want to see if you can simplify the wording without damaging your intended meaning."
+        },
+        {
+            "rule": [
+                {"var": "employability", "is": "equal", "val": "0"}
+            ],
+            "message": "<b>Employability Skills</b><br/> When writing your outcomes, consider using terms that will reflect future employability skills."
+        },
+        {
+            "rule": [
+                {"var": "employability", "is": "equal", "val": "1"}
+            ],
+            "message": "<b>Employability Skills</b><br/> Your verb choices reflect important employability skills in the area of __SKILLNAME__."
+        },
+        {
+            "rule": [
+                {"var": "employability", "is": "above", "val": "1"}
+            ],
+            "message": "<b>Employability Skills</b><br/> Your verb choices reflect __SKILLNAME__ skills."
+        },
+        {
+        	"rule": [
+        	    {"var": "solonum", "is": "above", "val": "0"}
+        	],
+        	"message": "<b>SOLO Taxonomy</b><br/> Your verb choices reflect the __SOLOLEVEL__ level of the SOLO taxonomy"
+        },
+        {
+            "rule": [
+                {"var": "flaggedword", "is": "above", "val": "0"}
+            ],
+            "message": "&quot;Understand&quot; is a very general word. Can you be more specific about what skills you want your students to build?"
         },
         {
             "rule": [
@@ -63,36 +93,6 @@ var metric_parameters = {
                 {"var": "repetition", "is": "above", "val": "1"}
             ],
             "message": "You seem to use the words __REP_WORD__ quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
-        },
-        {
-            "rule": [
-                {"var": "flaggedword", "is": "above", "val": "0"}
-            ],
-            "message": "&quot;Understand&quot; is a very general word. Can you be more specific about what skills you want your students to build?"
-        },
-        {
-            "rule": [
-                {"var": "employability", "is": "equal", "val": "0"}
-            ],
-            "message": "When writing your outcomes, consider using terms that will reflect future employability skills."
-        },
-        {
-            "rule": [
-                {"var": "employability", "is": "equal", "val": "1"}
-            ],
-            "message": "Your verb choices reflect important employability skills in the area of __SKILLNAME__."
-        },
-        {
-            "rule": [
-                {"var": "employability", "is": "above", "val": "1"}
-            ],
-            "message": "Your verb choices reflect important employability skills in the areas of __SKILLNAME__."
-        },
-        {
-        	"rule": [
-        	    {"var": "solonum", "is": "above", "val": "0"}
-        	],
-        	"message": "Your verb choices reflect the __SOLOLEVEL__ level of the SOLO taxonomy"
         }
     ],
     "empty_message": "Please paste learning outcomes for your unit into the box to check them",
