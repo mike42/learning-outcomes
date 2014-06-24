@@ -1,128 +1,5 @@
-/**
- * Chop up the source into sentences and words for computing metrics.
- * 
- * @param passage
- *            Text to read in
- * @returns Array of sentences contained in the text, with each sentence being
- *          an array of words. All words will be returned in lowercase.
- */
-function metric_read_passage(passage) {
-	// Replace ". " or ".\n" outside of parenthesis with "\n". Used to divide
-	// sentences correctly.
-	var alph = 'abcdefghijklmnopqrstuvwxyz-\'1234567890.';
-	var endSentence = '\n\r?!';
-	var i, c, d, e = 0, text = '';
-	for(i = 0; i < passage.length; i++) {
-		c = passage.substring(i, i + 1).toLowerCase();
-		if(c == '.' && e == 0) {
-			d = passage.substring(i + 1, i + 2).toLowerCase();
-			if(d == "" || alph.indexOf(d) == -1) {
-				c = "\n";
-			}
-		} else if(c == "(") {
-			e++;
-		} else if(c == ")") {
-			e--;
-			if(e < 0) {
-				// Non-matching brackets.
-				e = 0;
-			}
-		}
-		text += c;
-	}
-	
-	// Begin chopping
-	var prevIsAlph = false; // Previous character was part of a word
-	var isAlph, isEndSentence;
-	var word = '';
+/** File containing old code which has not yet been migrated to the new program structure */
 
-	/* Current sentence and stack of previous ones */
-	var sentence = [];
-	var sentences = [];
-
-	/* Loop over each character and build the structure */
-	for (i = 0; i < text.length; i++) {
-		c = text.substring(i, i + 1).toLowerCase();
-		isAlph = (alph.indexOf(c) != -1);
-		isEndSentence = (endSentence.indexOf(c) != -1);
-		if (isAlph == false && prevIsAlph == true) {
-			sentence.push([word, metric_word_syllable(word)]);
-			word = '';
-		} else if (isAlph == true) {
-			word += c;
-		}
-		if (sentence.length > 0 && isEndSentence) {
-			sentences.push(sentence);
-			sentence = [];
-		}
-		prevIsAlph = isAlph;
-	}
-	if (word.length > 0) {
-		sentence.push([word, metric_word_syllable(word)]);
-		word = '';
-	}
-	if (sentence.length > 0) {
-		sentences.push(sentence);
-		sentence = [];
-
-	}
-	return sentences;
-}
-
-/**
- * Flesch-Kincaid Reading Ease Score corresponding to these metrics
- * http://en.wikipedia.org/wiki/Flesch-Kincaid#Flesch_Reading_Ease
- * 
- * @param totalWords
- * @param totalSentences
- * @param totalSyllables
- * @return The readability score, or NaN if empty data was given.
- */
-function metric_passage_readability(totalWords, totalSentences, totalSyllables) {
-	if(totalSentences == 0 || totalWords == 0) {
-		return NaN;
-	}
-	return 206.835 - 1.015 * (totalWords / totalSentences) - 84.6 * (totalSyllables / totalWords);
-}
-
-/**
- * Estimate the number of syllables in a word
- * 
- * @param word
- *            The text to check
- * @returns The number of syllables found
- */
-function metric_word_syllable(word) {
-	if(word.length <= 3) { return 1; } 
-	word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
-	word = word.replace(/^y/, '');
-	var a = word.match(/[aeiouy]{1,2}/g);
-	if(a == null) {
-		// Long word with no vowels??
-		return 1;
-	}
-	return a.length;
-}
-
-/**
- * Count the words, syllables and sentences in the passage
- * 
- * @param sentences
- *            The list of sentences to analyse
- * @return The counts of the text
- */
-function metric_passage_wordcount(sentences) {
-	var totalWords = 0, totalSentences = 0, totalSyllables = 0;
-	var i, j;
-	totalSentences = sentences.length;
-	for(i = 0; i < sentences.length; i++) {
-		totalWords += sentences[i].length;
-		for(j = 0; j < sentences[i].length; j++) {
-			totalSyllables += sentences[i][j][1];
-		}
-	}
-	return {totalWords: totalWords, totalSentences: totalSentences, totalSyllables: totalSyllables};
-}
 
 /**
  * Count keywords in the text
@@ -169,40 +46,7 @@ function metric_passage_keywords(sentences) {
 	return {word_h: word_h, word_l: word_l};
 }
 
-/**
- * Find any over-used words of more than 1 syllable.
- * 
- * @param sentences
- *            The list of sentences to analyse
- * @returns
- */
-function metric_repetition(sentences) {
-    var rep = {};
-	for(i = 0; i < sentences.length; i++) {
-		for(j = 0; j < sentences[i].length; j++) {
-            if(sentences[i][j][1] <= 1) {
-                // Only worry about words greater than one syllable
-                continue;
-            }
-            w = sentences[i][j][0];
-            if(rep[w] == undefined) {
-                rep[w] = 0;
-            }
-            rep[w]++; 
-		}
-	}
 
-    var k = objSortRev(rep);
-    var count = 0;
-    var ret = [];
-    for(i = 0; i < k.length && count < 3; i++) {
-        if(rep[k[i]] > 3) {
-            ret.push(k[i]);
-            count++;
-        }
-    }
-    return ret;
-}
 
 /**
  * Get flagged words
@@ -233,30 +77,7 @@ function metric_flagged(sentences) {
 	return word_f;
 }
 
-/**
- * Get lower order thinking words as examples
- * 
- * @returns {Array} 
- */
-function metric_example_lwords() {
-    var l = [];
-    l.push(metric_parameters.word_l.knowledge[rand(0, metric_parameters.word_l.knowledge.length - 1)]);
-    l.push(metric_parameters.word_l.comprehension[rand(0, metric_parameters.word_l.comprehension.length - 1)]);
-    l.push(metric_parameters.word_l.application[rand(0, metric_parameters.word_l.application.length - 1)]);
-    return l;
-}
 
-/**
- * Get higher order thinking words as examples
- * @returns {Array}
- */
-function metric_example_hwords() {
-    var h = [];
-    h.push(metric_parameters.word_h.analysis[rand(0, metric_parameters.word_h.analysis.length - 1)]);
-    h.push(metric_parameters.word_h.synthesis[rand(0, metric_parameters.word_h.synthesis.length - 1)]);
-    h.push(metric_parameters.word_h.evaluation[rand(0, metric_parameters.word_h.evaluation.length - 1)]);
-    return h;
-}
 
 /**
  * Find employability words
@@ -291,6 +112,8 @@ function metric_employability(sentences) {
 	}
 	return {num: s_list.length, skill: s_list};
 }
+
+
 
 /**
  * Find SOLO taxonomy keywords
@@ -330,25 +153,15 @@ function metric_solo(sentences) {
 }
 
 /**
- * Join an array of English words into a good list (a, b and c).
- * 
- * @param words
- * @param sep
- * @returns
- */
-function joinWords(words, sep) {
-	var a = '';
-	if(words.length > 1) {
-		a = ' ' + sep + ' ' + words.pop();
-	}	
-    return words.join(', ') + a;
-}
-
-/**
  * 
  * @param text
  */
 function testLearningOutcomeFeedback(text, destination) {
+	var stats = metric_read_passages(text);
+	console.log(stats);
+	
+	return;
+	
 	$(destination).empty();
 
 	var passage = metric_read_passage(text);
@@ -408,6 +221,9 @@ function testLearningOutcomeFeedback(text, destination) {
     $(destination).append("<p>" + feedback.join("</p></p>") + "</p>");
 }
 
+/*
+ * Not currently suitable for use
+ * 
 function getLearningOutcomeFeedback(text, destination) {
 	   $(destination).empty();
 		var passage = metric_read_passage(text);
@@ -440,38 +256,27 @@ function getLearningOutcomeFeedback(text, destination) {
 	        sololvl: solo.level
 	    });
 	    $(destination).append("<p>" + feedback.join("</p></p>") + "</p>");
-}
-
-
-/**
- * Return list with each element encapsulated by <b></b> tags.
- **/
-function boldList(list) {
-    var n = [];
-    var i;
-    for(i = 0; i < list.length; i++) {
-        n.push('<b>' + list[i] + '</b>');
-    }
-    return n;
-}
-
+}*/
 
 /**
  * 
+ * @param message
  * @param variables
- * @returns {Array}
+ * @returns
  */
-function metric_provide_feedback(variables) {
-    var f = []; // Array of feedback strings
-
-    for(i = 0; i < metric_parameters.feedback.length; i++) {
-        if(metric_match_feedback(metric_parameters.feedback[i], variables)) {
-            f.push(metric_subst_feedback(metric_parameters.feedback[i].message, variables));
-        }
-    }
-    
-    return f;
+function metric_subst_feedback(message, variables) {
+	message = message.replace("__REP_WORD__", variables.repWords);
+	message = message.replace("__HWORDS__", variables.hWords);
+	message = message.replace("__LWORDS__", variables.lWords);
+	message = message.replace("__BAD_WORD__", variables.fWords);
+	message = message.replace("__WC__", variables.wordcount);
+	message = message.replace("__SKILLNAME__", variables.skill);
+	message = message.replace("__SOLOLEVEL__", variables.sololvl);
+    return message;
 }
+
+
+
 
 /**
  * Determine whether feedback is applicable here (very generic matching of variables to rules)
@@ -549,42 +354,47 @@ function metric_match_feedback(feedback, variables) {
     return match;
 }
 
+
+
 /**
  * 
- * @param message
  * @param variables
- * @returns
+ * @returns {Array}
  */
-function metric_subst_feedback(message, variables) {
-	message = message.replace("__REP_WORD__", variables.repWords);
-	message = message.replace("__HWORDS__", variables.hWords);
-	message = message.replace("__LWORDS__", variables.lWords);
-	message = message.replace("__BAD_WORD__", variables.fWords);
-	message = message.replace("__WC__", variables.wordcount);
-	message = message.replace("__SKILLNAME__", variables.skill);
-	message = message.replace("__SOLOLEVEL__", variables.sololvl);
-    return message;
+function metric_provide_feedback(variables) {
+    var f = []; // Array of feedback strings
+
+    for(i = 0; i < metric_parameters.feedback.length; i++) {
+        if(metric_match_feedback(metric_parameters.feedback[i], variables)) {
+            f.push(metric_subst_feedback(metric_parameters.feedback[i].message, variables));
+        }
+    }
+    
+    return f;
+}
+
+
+/**
+ * Get lower order thinking words as examples
+ * 
+ * @returns {Array} 
+ */
+function outcomes_example_lwords() {
+    var l = [];
+    l.push(metric_parameters.word_l.knowledge[rand(0, metric_parameters.word_l.knowledge.length - 1)]);
+    l.push(metric_parameters.word_l.comprehension[rand(0, metric_parameters.word_l.comprehension.length - 1)]);
+    l.push(metric_parameters.word_l.application[rand(0, metric_parameters.word_l.application.length - 1)]);
+    return l;
 }
 
 /**
- * Return keys of an array sorted by value, in reverse.
- * @param obj
- * @returns
+ * Get higher order thinking words as examples
+ * @returns {Array}
  */
-function objSortRev(obj) {
-    var keys = [];
-    for(var key in obj)
-        keys.push(key);
-    var sortedKeys = keys.sort(function(a,b){return obj[a]-obj[b]});
-    return sortedKeys.reverse();
-}
-
-/**
- * Quick random number function
- * @param min
- * @param max
- * @returns random number between min and max
- */
-function rand(min, max) {
-	return Math.floor((Math.random() * max) + min);
+function outcomes_example_hwords() {
+    var h = [];
+    h.push(metric_parameters.word_h.analysis[rand(0, metric_parameters.word_h.analysis.length - 1)]);
+    h.push(metric_parameters.word_h.synthesis[rand(0, metric_parameters.word_h.synthesis.length - 1)]);
+    h.push(metric_parameters.word_h.evaluation[rand(0, metric_parameters.word_h.evaluation.length - 1)]);
+    return h;
 }
