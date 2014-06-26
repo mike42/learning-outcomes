@@ -99,36 +99,36 @@ var metric_parameters = {
 	"flagged_feedback" : [
 			{
 				"words" : [ "understand" ],
-				"message" : "Understanding is highly subjective and can be easily misunderstood, consider an observable and measurable verb such as: __WORDS__."
+				"message" : "Understanding is highly subjective and can be easily misunderstood, consider an observable and measurable verb such as: __WORDS,OR__."
 			},
 			{
 				"words" : [ "appreciate", "appreciation" ],
-				"message" : "Consider replacing 'appreciate' with an action-oriented and measurable verb, such as: __WORDS__. These verbs will provide the students with an opportunity to demonstrate the level of their awareness of the concepts you want them to achieve."
+				"message" : "Consider replacing 'appreciate' with an action-oriented and measurable verb, such as: __WORDS,OR__. These verbs will provide the students with an opportunity to demonstrate the level of their awareness of the concepts you want them to achieve."
 			},
 			{
 				"words" : [ "know" ],
-				"message" : "To clarify the level of knowledge you wish students to achieve, consider replacing 'know' with an actionable and measurable verb such as: __WORDS__."
+				"message" : "To clarify the level of knowledge you wish students to achieve, consider replacing 'know' with an actionable and measurable verb such as: __WORDS,OR__."
 			},
 			{
 				"words" : [ "gain" ],
-				"message" : "Consider replacing 'gain' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+				"message" : "Consider replacing 'gain' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__."
 			},
 			{
 				"words" : [ "obtain skills" ],
-				"message" : "Consider replacing 'obtain skills' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__"
+				"message" : "Consider replacing 'obtain skills' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__"
 			},
 			{
 				"words" : [ "have knowledge" ],
-				"message" : "Consider replacing 'have knowledge' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+				"message" : "Consider replacing 'have knowledge' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__."
 			},
 			{
 				"words" : [ "understand the importance",
 						"understand importance" ],
-				"message" : "Consider replacing 'understand importance of... ' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+				"message" : "Consider replacing 'understand importance of... ' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__."
 			},
 			{
 				"words" : [ "recognise importance" ],
-				"message" : "Consider replacing 'recognise the importance of...' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+				"message" : "Consider replacing 'recognise the importance of...' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__."
 			},
 			{
 				"words" : [ "have understanding", "have an understanding" ],
@@ -136,7 +136,7 @@ var metric_parameters = {
 			},
 			{
 				"words" : [ "learn about" ],
-				"message" : "Consider using an observable and measureable verb to describe what the student can demonstrate, such as __WORDS__."
+				"message" : "Consider using an observable and measureable verb to describe what the student can demonstrate, such as __WORDS,OR__."
 			},
 			{
 				"words" : [ "develop" ],

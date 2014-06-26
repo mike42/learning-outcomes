@@ -40,7 +40,7 @@ function outcomes_read_passages(text) {
  * 
  * @param word
  */
-function outcome_word_filter(word) {
+function outcomes_word_filter(word) {
 	/* Some quick conversions so that the word comparisons work across different English spelling */
 	if(word.length > 3 && word.substr(word.length - 3, 3) == "ize") {
 		word = word.substr(0, word.length - 3) + "ise";
@@ -100,7 +100,7 @@ function outcomes_read_passage(passage) {
 		isAlph = (alph.indexOf(c) != -1);
 		isEndSentence = (endSentence.indexOf(c) != -1);
 		if (isAlph == false && prevIsAlph == true) {
-			sentence.push([ outcome_word_filter(word), outcomes_word_syllable(word) ]);
+			sentence.push([ outcomes_word_filter(word), outcomes_word_syllable(word) ]);
 			word = '';
 		} else if (isAlph == true) {
 			word += c;
@@ -112,7 +112,7 @@ function outcomes_read_passage(passage) {
 		prevIsAlph = isAlph;
 	}
 	if (word.length > 0) {
-		sentence.push([ outcome_word_filter(word), outcomes_word_syllable(word) ]);
+		sentence.push([ outcomes_word_filter(word), outcomes_word_syllable(word) ]);
 		word = '';
 	}
 	if (sentence.length > 0) {
@@ -341,7 +341,7 @@ function outcomes_outcome_feedback(parsed) {
 	stats.solonum = stats.solo == "" ? 0 : 1;
 	
 	// Find a list of applicable messages
-	var messages = outcome_compile_messages(stats, metric_parameters.feedback);
+	var messages = outcomes_compile_messages(stats, metric_parameters.feedback);
 
 	return {
 		stats : stats,
@@ -375,7 +375,7 @@ function outcomes_overall_feedback(passages) {
 	stats.outcome_c = passages.length;
 	
 	// Find a list of applicable messages
-	var messages = outcome_compile_messages(stats, metric_parameters.overall_feedback);
+	var messages = outcomes_compile_messages(stats, metric_parameters.overall_feedback);
 		
 	return {
 		stats : stats,
@@ -444,10 +444,26 @@ function outcomes_rand(min, max) {
  * @param text
  * @param destination
  */
-function outcomes_random_word(keywords, count) {
+function outcomes_random_word(keywords) {
 	return keywords[outcomes_rand(0, keywords.length - 1)];
 }
 
+/**
+ * Return one unique word from each of the four levels of the SOLO taxonomy as examples
+ */
+function outcomes_example_words() {
+	var temp, i, found = {}, ret = [];
+
+	for(i = 0; i < metric_parameters.solo.length; i++) {
+		do { // Loop prevents duplicates on list.
+			temp = outcomes_random_word(metric_parameters.solo[i].list);
+		} while(found[temp] !== undefined);
+		found[temp] = 1;
+		ret.push(temp);
+	}
+
+	return ret;
+}
 
 /**
  * From a list of rules, provide feedback which matches them
@@ -456,26 +472,45 @@ function outcomes_random_word(keywords, count) {
  * @param rules
  * @returns {Array} A list of matched messages
  */
-function outcome_compile_messages(stats, rules) {
-	console.log(stats); console.log(rules);
-	
+function outcomes_compile_messages(stats, rules) {
     var f = []; // Array of feedback strings
     for(i = 0; i < rules.length; i++) {
     	/* Test each rule in the list */
-        if(outcome_match_message(stats, rules[i].rule)) {
-        	// TODO refresh examples in stats.
-        	stats.words = ["buffalo", "buffalo"];
-            f.push(outcome_subst_message(rules[i].message, stats));
+        if(outcomes_match_message(stats, rules[i].rule)) {
+        	stats.words = outcomes_example_words();
+            f.push(outcomes_subst_message(rules[i].message, stats));
         }
     }
     
-    if(stats.flagged !== undefined) {
-    	/* Add flagged word feedback here */
-    	
-    	// TODO
+    if(stats.flagged !== undefined && stats.flagged.length > 0) {
+    	/* Add flagged word feedback here. Does not work under 'overall' feedback, hence undefined check */
+    	var message = "";
+    	for(i = 0; i < stats.flagged.length; i++) {
+    		message = outcomes_find_flagged_message(stats.flagged[i], metric_parameters.flagged_feedback);
+    		if(message != undefined) {
+    			stats.words = outcomes_example_words();
+    			f.push(outcomes_subst_message(message, stats));
+    			break; // Limit of one verb suggestion
+    		}
+    	}
     }
-    
     return f;
+}
+
+/**
+ * Given a flagged word, return the appropriate feedback from the list.
+ */
+function outcomes_find_flagged_message(word, list) {
+	var i, j;
+	for(i = 0; i < list.length; i++) {
+		for(j = 0; j < list[i].words.length; j++) {
+			if(list[i].words[j] == word) {
+				/* Return the first message in the list which matches this flagged word */
+				return list[i].message;
+			}
+		}
+	}
+	return undefined;
 }
 
 /**
@@ -485,7 +520,7 @@ function outcome_compile_messages(stats, rules) {
  * @param rule
  * @returns {Boolean}
  */
-function outcome_match_message(stats, rule) {
+function outcomes_match_message(stats, rule) {
 	if(rule.length == 0) {
 		return false;
 	}
@@ -533,7 +568,7 @@ function outcome_match_message(stats, rule) {
  * @param stats
  * @returns
  */
-function outcome_subst_message(message, stats) {
+function outcomes_subst_message(message, stats) {
 	for (var key in stats) {
 		if(stats[key] instanceof Array) {
 			// AND and OR joins
@@ -546,6 +581,12 @@ function outcome_subst_message(message, stats) {
 	return message;
 }
 
+/**
+ * A test routine to throw important stats onto a given element.
+ * 
+ * @param text
+ * @param destination
+ */
 function testLearningOutcomeFeedback(text, destination) {
 	var stats = outcomes_read_passages(text);
 	console.log(stats);
@@ -554,7 +595,7 @@ function testLearningOutcomeFeedback(text, destination) {
 	$(destination).append('<h4>Overall</h4>');
 
 	$(destination).append('Wordcount of shortest outcome: ' + stats.feedback.stats.min_words + '<br/>');
-	$(destination).append('Number of outcomes: ' + stats.outcome_c + '<br/>');
+	$(destination).append('Number of outcomes: ' + stats.feedback.stats.outcome_c + '<br/>');
 
 	if(stats.feedback.messages.length > 0) {
 		$(destination).append('<ul>');
