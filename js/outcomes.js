@@ -15,13 +15,14 @@ function outcomes_read_passages(text) {
 
 	/* Loop over each character and build the structure */
 	for (i = 0; i < text.length; i++) {
-		c = text.substring(i, i + 1).toLowerCase();
+		c = text.substring(i, i + 1);
 		passage += c;
 		isEndPassage = (endPassage.indexOf(c) != -1) || i == text.length - 1;
-		if (passage.length > 0 && isEndPassage == true) {
+		if (isEndPassage == true && passage.trim().length > 0) {
 			parsed = outcomes_read_passage(passage);
 			feedback = outcomes_outcome_feedback(parsed);
 			passages.push({
+				outcome_original: passage,
 				outcome : parsed,
 				feedback : feedback
 			});
@@ -276,6 +277,41 @@ function outcomes_keyword_match(keywords, sentences) {
 }
 
 /**
+ * Find a list of employability skills being offered in this outcome
+ * 
+ * @param skills
+ * @param keywords
+ */
+function outcomes_employability_keywords(skill, parsed) {
+	var i, keywords;
+	var skills = [];
+	for(i = 0; i < skill.length; i++) {
+		keywords = outcomes_keyword_match(skill[i].list, parsed);
+		if(keywords.length > 0) {
+			skills.push(skill[i].name);
+		}
+	}
+	return skills;
+}
+
+/**
+ * Find the highest level of the SOLO taxonomy which is covered by the paragraphs
+ * 
+ * @param solo
+ * @param keywords
+ */
+function outcomes_solo_keywords(solo, parsed) {
+	var i, keywords;
+	for(i = solo.length - 1; i >= 0; i--) {
+		keywords = outcomes_keyword_match(solo[i].list, parsed);
+		if(keywords.length > 0) {
+			return solo[i].name;
+		}
+	}
+	return '';
+}
+
+/**
  * Provide stats and feedback relevant to an individual outcome
  * 
  * @param parsed
@@ -284,18 +320,20 @@ function outcomes_keyword_match(keywords, sentences) {
 function outcomes_outcome_feedback(parsed) {
 	// Find all stats
 	var counts = outcomes_passage_wordcount(parsed);
-	
+
 	// Build words lists
 	var word_l = metric_parameters.word_l.knowledge.concat(metric_parameters.word_l.comprehension.concat(metric_parameters.word_l.application));
 	var word_h = metric_parameters.word_h.analysis.concat(metric_parameters.word_h.synthesis.concat(metric_parameters.word_h.evaluation))
-	console.log(word_l);
 	var stats = {
-		counts : counts,
-		readability : outcomes_passage_readability(counts.totalWords,
+		counts: counts,
+		readability: outcomes_passage_readability(counts.totalWords,
 				counts.totalSentences, counts.totalSyllables),
-		repetition : outcomes_repetition(parsed),
+		repetition: outcomes_repetition(parsed),
 		word_h: outcomes_keyword_match(word_h, parsed),
-		word_l: outcomes_keyword_match(word_l, parsed)
+		word_l: outcomes_keyword_match(word_l, parsed),
+		flagged: outcomes_keyword_match(metric_parameters.word_flagged, parsed),
+		employability: outcomes_employability_keywords(metric_parameters.skill, parsed),
+		solo: outcomes_solo_keywords(metric_parameters.solo, parsed)
 	};
 
 	// Find a list of applicable messaegs
@@ -314,7 +352,21 @@ function outcomes_outcome_feedback(parsed) {
  * @returns
  */
 function outcomes_overall_feedback(passages) {
-	var stats, messages;
+	var i;
+	
+	var stats = {}, messages;
+
+	// Find how many words are in the shortest sentence.
+	stats.minWords = -1;
+	for(i = 0; i < passages.length; i++) {
+		if(stats.minWords == -1 || passages[i].feedback.stats.counts.totalWords < stats.minWords) {
+			stats.minWords = passages[i].feedback.stats.counts.totalWords;
+		}
+	}
+	if(stats.minWords == -1) { // When there are no passages at all.
+		stats.minWords = 0;
+	}
+	
 	return {
 		stats : stats,
 		messages : messages
@@ -338,6 +390,7 @@ function outcomes_joinWords(words, sep) {
 
 /**
  * Return list with each element encapsulated by <b></b> tags.
+ * 
  **/
 function outcomes_boldList(list) {
 	var n = [];
@@ -350,6 +403,7 @@ function outcomes_boldList(list) {
 
 /**
  * Return keys of an array sorted by value, in reverse.
+ * 
  * @param obj
  * @returns
  */
@@ -365,6 +419,7 @@ function outcomes_objSortRev(obj) {
 
 /**
  * Quick random number function
+ * 
  * @param min
  * @param max
  * @returns random number between min and max
@@ -373,7 +428,37 @@ function outcomes_rand(min, max) {
 	return Math.floor((Math.random() * max) + min);
 }
 
+/**
+ * Get a random word from a keyword list
+ * 
+ * @param text
+ * @param destination
+ */
+function outcomes_random_word(keywords, count) {
+	return keywords[outcomes_rand(0, keywords.length - 1)];
+}
+
 function testLearningOutcomeFeedback(text, destination) {
 	var stats = outcomes_read_passages(text);
 	console.log(stats);
+	$(destination).empty();
+	$(destination).append('<h4>Overall</h4>');
+
+	$(destination).append('Wordcount of shortest outcome: ' + stats.feedback.stats.minWords + '<br/>');
+	$(destination).append('Number of outcomes: ' + stats.outcomes.length + '<br/>');
+
+	for(i = 0; i < stats.outcomes.length; i++) {
+		$(destination).append('<h4>Outcome #' + (i+1) + ' </h4>');
+		$(destination).append('Words: ' + stats.outcomes[i].feedback.stats.counts.totalWords + '<br/>');
+		$(destination).append('Sentences: ' + stats.outcomes[i].feedback.stats.counts.totalSentences + '<br/>');
+		$(destination).append('Syllables: ' + stats.outcomes[i].feedback.stats.counts.totalSyllables + '<br/>');
+		$(destination).append('Readability: ' + stats.outcomes[i].feedback.stats.counts.totalSyllables + '<br/>');
+		$(destination).append('Lower order words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.word_l, 'and') + ' (' + stats.outcomes[i].feedback.stats.word_l.length + ')<br/>');
+		$(destination).append('Higher order words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.word_h, 'and') + ' (' + stats.outcomes[i].feedback.stats.word_h.length + ')<br/>');
+		$(destination).append('Readability: ' + stats.outcomes[i].feedback.stats.readability + '<br/>');
+		$(destination).append('Over-used words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.repetition, 'and') + ' (' + stats.outcomes[i].feedback.stats.repetition.length + ')<br/>');
+		$(destination).append('Flagged: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.flagged, 'and') + ' (' + stats.outcomes[i].feedback.stats.flagged.length + ')<br/>');
+		$(destination).append('Employability: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.employability, 'and') + ' (' + stats.outcomes[i].feedback.stats.employability.length + ')<br/>');
+		$(destination).append('SOLO Level: ' + stats.outcomes[i].feedback.stats.solo + '<br/>');
+	}
 }
