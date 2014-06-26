@@ -16,5 +16,51 @@
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/metric-parameters.js?t=2014-06-26"></script>
 	<script src="js/outcomes.js?t=2014-06-26"></script>
+	<script>
+		/**
+		 * A test routine to throw important stats onto a given element.
+		 * 
+		 * @param text
+		 * @param destination
+		 */
+		function testLearningOutcomeFeedback(text, destination) {
+			var stats = outcomes_read_passages(text);
+			console.log(stats);
+			
+			$(destination).empty();
+			$(destination).append('<h4>Overall</h4>');
+	
+			$(destination).append('Wordcount of shortest outcome: ' + stats.feedback.stats.min_words + '<br/>');
+			$(destination).append('Number of outcomes: ' + stats.feedback.stats.outcome_c + '<br/>');
+	
+			if(stats.feedback.messages.length > 0) {
+				$(destination).append('<ul>');
+				for(j = 0; j < stats.feedback.messages.length; j++) {
+					$(destination).append('<li>' + stats.feedback.messages[j] + '</li>');
+				}
+				$(destination).append('</ul>');
+			}
+			
+			for(i = 0; i < stats.outcomes.length; i++) {
+				$(destination).append('<h4>Outcome #' + (i+1) + ' </h4>');
+				$(destination).append('Words: ' + stats.outcomes[i].feedback.stats.word_c + '<br/>');
+				$(destination).append('Sentences: ' + stats.outcomes[i].feedback.stats.sentence_c + '<br/>');
+				$(destination).append('Syllables: ' + stats.outcomes[i].feedback.stats.syllable_c + '<br/>');
+				$(destination).append('Readability: ' + stats.outcomes[i].feedback.stats.readability + '<br/>');
+				$(destination).append('Over-used words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.repetition, 'and') + ' (' + stats.outcomes[i].feedback.stats.repetition_c + ')<br/>');
+				$(destination).append('Flagged: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.flagged, 'and') + ' (' + stats.outcomes[i].feedback.stats.flagged_c + ')<br/>');
+				$(destination).append('Employability: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.employability, 'and') + ' (' + stats.outcomes[i].feedback.stats.employability_c + ')<br/>');
+				$(destination).append('SOLO Level: ' + stats.outcomes[i].feedback.stats.solo + ' (' + stats.outcomes[i].feedback.stats.solonum + ')<br/>');
+	
+				if(stats.outcomes[i].feedback.messages.length > 0) {
+					$(destination).append('<ul>');
+					for(j = 0; j < stats.outcomes[i].feedback.messages.length; j++) {
+						$(destination).append('<li>' + stats.outcomes[i].feedback.messages[j] + '</li>');
+					}
+					$(destination).append('</ul>');
+				}
+			}
+		}
+	</script>
 </body>
 </html>
