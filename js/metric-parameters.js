@@ -24,7 +24,7 @@ var metric_parameters = {
 					"is" : "range",
 					"val" : ["7", "10"]
 				} ],
-				"message" : "You have included more outcomes than recommended. Can some of them be merged together or removed?"
+				"message" : "You have included a large number of outcomes. Can some of them be merged together or removed?"
 			},
 			{
 				"rule" : [ {
