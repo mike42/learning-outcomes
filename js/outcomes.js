@@ -21,11 +21,13 @@ function outcomes_read_passages(text) {
 		if (isEndPassage == true && passage.trim().length > 0) {
 			parsed = outcomes_read_passage(passage);
 			feedback = outcomes_outcome_feedback(parsed);
-			passages.push({
-				outcome_original: passage,
-				outcome : parsed,
-				feedback : feedback
-			});
+			if(feedback.stats.word_c > 0) {
+				passages.push({
+					outcome_original: passage,
+					outcome : parsed,
+					feedback : feedback
+				});
+			}
 			passage = '';
 		}
 	}
@@ -376,7 +378,11 @@ function outcomes_overall_feedback(passages) {
 	
 	// Find a list of applicable messages
 	var messages = outcomes_compile_messages(stats, metric_parameters.overall_feedback);
-		
+	if(messages.length > 1 && messages[messages.length - 1] == "") {
+		messages.pop();
+		stats.cancel = "yes";
+	}
+	
 	return {
 		stats : stats,
 		messages : messages
@@ -479,6 +485,10 @@ function outcomes_compile_messages(stats, rules) {
         if(outcomes_match_message(stats, rules[i].rule)) {
         	stats.words = outcomes_example_words();
             f.push(outcomes_subst_message(rules[i].message, stats));
+            if(rules[i].cancel !== undefined) {
+            	f.push("");
+            	return f;
+            }
         }
     }
     
@@ -636,7 +646,8 @@ function showLearningOutcomeFeedback(textbox, panel) {
 			$(panel).append('<p>' + stats.feedback.messages[j] + '</p>');
 			break;
 		}
-	} else {
+	}
+	if(stats.feedback.stats.cancel == undefined) {
 		for(i = 0; i < stats.outcomes.length; i++) {
 			if(stats.outcomes[i].feedback.messages.length > 0) {
 				feedback = '<div>';

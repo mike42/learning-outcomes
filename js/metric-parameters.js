@@ -4,25 +4,34 @@ var metric_parameters = {
 				"rule" : [ {
 					"var" : "min_words",
 					"is" : "below",
-					"val" : "7"
+					"val" : "5"
 				} ],
-				"message" : "You need to type longer outcomes for them to be meaningful."
+				"message" : "Some of your outcomes were too short to analyse. Please make sure that each one of them consists of more than a few words.",
+				"cancel": "yes"
 			}, {
 				"rule" : [ {
 					"var" : "outcome_c",
 					"is" : "above",
 					"val" : "6"
 				} ],
-				"message" : "Too many outcomes."
+				"message" : "You have included more outcomes than recommended. Can some of them be merged together or removed?"
 			}, ],
 	"feedback" : [
 			{
 				"rule" : [ {
 					"var" : "word_c",
-					"is" : "above",
-					"val" : "0"
+					"is" : "range",
+					"val" : [ "0", "25" ]
 				} ],
 				"message" : "<b>Word count:</b> __WORD_C__."
+			},
+			{
+				"rule" : [ {
+					"var" : "word_c",
+					"is" : "above",
+					"val" : "25"
+				} ],
+				"message" : "<b>Word count:</b> __WORD_C__. This outcome is quite long. You may wish to consider making it more concise."
 			},
 			{
 				"rule" : [ {
@@ -88,7 +97,6 @@ var metric_parameters = {
 				} ],
 				"message" : "You seem to use the words <b>__REPETITION,AND__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
 			} ],
-	"empty_message" : "Please paste learning outcomes for your unit into the box to check them",
 	"word_flagged" : [ "understand", "appreciate", "appreciation", "know",
 			"gain", "obtain skills", "have knowledge",
 			"understand the importance", "understand importance",
