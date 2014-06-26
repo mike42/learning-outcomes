@@ -4,7 +4,7 @@ var metric_parameters = {
 				"rule" : [ {
 					"var" : "min_words",
 					"is" : "below",
-					"val" : "20"
+					"val" : "7"
 				} ],
 				"message" : "You need to type longer outcomes for them to be meaningful."
 			}, {

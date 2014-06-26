@@ -625,3 +625,29 @@ function testLearningOutcomeFeedback(text, destination) {
 		}
 	}
 }
+
+function showLearningOutcomeFeedback(textbox, panel) {
+	$(panel).hide();
+	$(panel).empty();
+	var stats = outcomes_read_passages($(textbox).val());
+	
+	if(stats.feedback.messages.length > 0) {
+		for(j = 0; j < stats.feedback.messages.length; j++) {
+			$(panel).append('<p>' + stats.feedback.messages[j] + '</p>');
+			break;
+		}
+	} else {
+		for(i = 0; i < stats.outcomes.length; i++) {
+			if(stats.outcomes[i].feedback.messages.length > 0) {
+				feedback = '<div>';
+				for(j = 0; j < stats.outcomes[i].feedback.messages.length; j++) {
+					feedback += '<p>' + stats.outcomes[i].feedback.messages[j] + '</p>';
+				}
+				feedback += '</div>';
+				$(panel).append(feedback);
+			}
+		}
+	}
+	
+	$(panel).show(300);
+}
