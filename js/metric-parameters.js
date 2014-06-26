@@ -3,25 +3,44 @@ var metric_parameters = {
 			{
 				"rule" : [ {
 					"var" : "min_words",
-					"is" : "below",
-					"val" : "5"
+					"is" : "equal",
+					"val" : "0"
 				} ],
-				"message" : "Some of your outcomes were too short to analyse. Please make sure that each one of them consists of more than a few words.",
-				"cancel": "yes"
-			}, {
+				"message" : "Please paste learning outcomes for your unit into the box to check them.",
+				"cancel" : "yes"
+			},
+			{
+				"rule" : [ {
+					"var" : "min_words",
+					"is" : "range",
+					"val" : [ "1", "3" ]
+				} ],
+				"message" : "Some of your outcomes were too short to analyse effectively. Please make sure that each one of them consists of more than just a few words.",
+				"cancel" : "yes"
+			},
+			{
+				"rule" : [ {
+					"var" : "outcome_c",
+					"is" : "range",
+					"val" : ["7", "10"]
+				} ],
+				"message" : "You have included more outcomes than recommended. Can some of them be merged together or removed?"
+			},
+			{
 				"rule" : [ {
 					"var" : "outcome_c",
 					"is" : "above",
-					"val" : "6"
+					"val" : ["10"]
 				} ],
-				"message" : "You have included more outcomes than recommended. Can some of them be merged together or removed?"
-			}, ],
+				"message" : "You have included too many outcomes. Please remove a few.",
+				"cancel" : "yes"
+			}],
 	"feedback" : [
 			{
 				"rule" : [ {
 					"var" : "word_c",
 					"is" : "range",
-					"val" : [ "0", "25" ]
+					"val" : [ "7", "25" ]
 				} ],
 				"message" : "<b>Word count:</b> __WORD_C__."
 			},
@@ -32,6 +51,14 @@ var metric_parameters = {
 					"val" : "25"
 				} ],
 				"message" : "<b>Word count:</b> __WORD_C__. This outcome is quite long. You may wish to consider making it more concise."
+			},
+			{
+				"rule" : [ {
+					"var" : "word_c",
+					"is" : "below",
+					"val" : "6"
+				} ],
+				"message" : "<b>Word count:</b> __WORD_C__. This outcome is very short. You may wish to consider expanding it."
 			},
 			{
 				"rule" : [ {
@@ -80,6 +107,14 @@ var metric_parameters = {
 					"val" : "0"
 				} ],
 				"message" : "<b>SOLO Taxonomy</b><br/> Your verb choices reflect the <b>__SOLO__</b> level of the SOLO taxonomy"
+			},
+			{
+				"rule" : [ {
+					"var" : "solonum",
+					"is" : "equal",
+					"val" : "0"
+				} ],
+				"message" : "<b>Measurability of this outcome</b><br/>Consider including an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__."
 			},
 			{
 				"rule" : [ {
