@@ -2,14 +2,14 @@ var metric_parameters = {
 	"overall_feedback" : [
 			{
 				"rule" : [ {
-					"var" : "minwords",
+					"var" : "min_words",
 					"is" : "below",
 					"val" : "20"
 				} ],
 				"message" : "You need to type longer outcomes for them to be meaningful."
 			}, {
 				"rule" : [ {
-					"var" : "outcomes",
+					"var" : "outcome_c",
 					"is" : "above",
 					"val" : "6"
 				} ],
@@ -18,11 +18,11 @@ var metric_parameters = {
 	"feedback" : [
 			{
 				"rule" : [ {
-					"var" : "wordcount",
+					"var" : "word_c",
 					"is" : "above",
 					"val" : "0"
 				} ],
-				"message" : "<b>Word count:</b> __WC__."
+				"message" : "<b>Word count:</b> __WORD_C__."
 			},
 			{
 				"rule" : [ {
@@ -50,7 +50,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "employability",
+					"var" : "employability_c",
 					"is" : "equal",
 					"val" : "0"
 				} ],
@@ -58,11 +58,11 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "employability",
+					"var" : "employability_c",
 					"is" : "above",
 					"val" : "0"
 				} ],
-				"message" : "<b>Employability Skills</b><br/> Your verb choices reflect __SKILLNAME__ skills."
+				"message" : "<b>Employability Skills</b><br/> Your verb choices reflect __EMPLOYABILITY,AND__ skills."
 			},
 			{
 				"rule" : [ {
@@ -70,23 +70,23 @@ var metric_parameters = {
 					"is" : "above",
 					"val" : "0"
 				} ],
-				"message" : "<b>SOLO Taxonomy</b><br/> Your verb choices reflect the <b>__SOLOLEVEL__</b> level of the SOLO taxonomy"
+				"message" : "<b>SOLO Taxonomy</b><br/> Your verb choices reflect the <b>__SOLO__</b> level of the SOLO taxonomy"
 			},
 			{
 				"rule" : [ {
-					"var" : "repetition",
+					"var" : "repetition_c",
 					"is" : "equal",
 					"val" : "1"
 				} ],
-				"message" : "You seem to use the word <b>__REP_WORD__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+				"message" : "You seem to use the word <b>__REPETITION,AND__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
 			},
 			{
 				"rule" : [ {
-					"var" : "repetition",
+					"var" : "repetition_c",
 					"is" : "above",
 					"val" : "1"
 				} ],
-				"message" : "You seem to use the words <b>__REP_WORD__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
+				"message" : "You seem to use the words <b>__REPETITION,AND__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
 			} ],
 	"empty_message" : "Please paste learning outcomes for your unit into the box to check them",
 	"word_flagged" : [ "understand", "appreciate", "appreciation", "know",

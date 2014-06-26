@@ -323,7 +323,9 @@ function outcomes_outcome_feedback(parsed) {
 
 	// Build words lists
 	var stats = {
-		counts: counts,
+		word_c: counts.totalWords,
+		syllable_c: counts.totalSyllables,
+		sentence_c: counts.totalSentences,
 		readability: outcomes_passage_readability(counts.totalWords,
 				counts.totalSentences, counts.totalSyllables),
 		repetition: outcomes_repetition(parsed),
@@ -332,8 +334,14 @@ function outcomes_outcome_feedback(parsed) {
 		solo: outcomes_solo_keywords(metric_parameters.solo, parsed)
 	};
 
+	// Add counts
+	stats.repetition_c = stats.repetition.length;
+	stats.flagged_c = stats.flagged.length;
+	stats.employability_c = stats.employability.length;
+	stats.solonum = stats.solo == "" ? 0 : 1;
+	
 	// Find a list of applicable messages
-	var messages = [];
+	var messages = outcome_compile_messages(stats, metric_parameters.feedback);
 
 	return {
 		stats : stats,
@@ -353,18 +361,21 @@ function outcomes_overall_feedback(passages) {
 	var stats = {};
 
 	// Find how many words are in the shortest sentence.
-	stats.minWords = -1;
+	stats.min_words = -1;
 	for(i = 0; i < passages.length; i++) {
-		if(stats.minWords == -1 || passages[i].feedback.stats.counts.totalWords < stats.minWords) {
-			stats.minWords = passages[i].feedback.stats.counts.totalWords;
+		if(stats.min_words == -1 || passages[i].feedback.stats.word_c < stats.min_words) {
+			stats.min_words = passages[i].feedback.stats.word_c;
 		}
 	}
-	if(stats.minWords == -1) { // When there are no passages at all.
-		stats.minWords = 0;
+	if(stats.min_words == -1) { // When there are no passages at all.
+		stats.min_words = 0;
 	}
 	
+	// Add counts
+	stats.outcome_c = passages.length;
+	
 	// Find a list of applicable messages
-	var messages = [];
+	var messages = outcome_compile_messages(stats, metric_parameters.overall_feedback);
 		
 	return {
 		stats : stats,
@@ -437,6 +448,104 @@ function outcomes_random_word(keywords, count) {
 	return keywords[outcomes_rand(0, keywords.length - 1)];
 }
 
+
+/**
+ * From a list of rules, provide feedback which matches them
+ * 
+ * @param stats
+ * @param rules
+ * @returns {Array} A list of matched messages
+ */
+function outcome_compile_messages(stats, rules) {
+	console.log(stats); console.log(rules);
+	
+    var f = []; // Array of feedback strings
+    for(i = 0; i < rules.length; i++) {
+    	/* Test each rule in the list */
+        if(outcome_match_message(stats, rules[i].rule)) {
+        	// TODO refresh examples in stats.
+        	stats.words = ["buffalo", "buffalo"];
+            f.push(outcome_subst_message(rules[i].message, stats));
+        }
+    }
+    
+    if(stats.flagged !== undefined) {
+    	/* Add flagged word feedback here */
+    	
+    	// TODO
+    }
+    
+    return f;
+}
+
+/**
+ * Determine if a given rule is met.
+ * 
+ * @param stats
+ * @param rule
+ * @returns {Boolean}
+ */
+function outcome_match_message(stats, rule) {
+	if(rule.length == 0) {
+		return false;
+	}
+	
+	var i, match = true, v;
+	for(i = 0; i < rule.length; i++) {
+		v = stats[rule[i].var];		
+		if(v === undefined) {
+			match = false;
+			console.log("A rule tried to use undefined metric: " + rule[i].var);
+			break;
+		}
+		
+		/* Compare it */
+		switch(rule[i].is) {
+		case 'above':
+			match = (v > rule[i].val);
+			break;
+		case 'below':
+			match = (v < rule[i].val);
+			break;
+		case 'equal':
+			match = (v == rule[i].val);
+			break;
+		case 'range': // Inclusive range
+			match = (v >= rule[i].val[0]) && (v <= rule[i].val[1]);
+			break;
+		default:
+			match = false;
+			console.log("Invalid operator in rule list: " + rule[i].is);
+			break;
+		}
+		
+		if(!match) {
+			break;
+		}
+	}
+	return match;
+}
+
+/**
+ * Take a message, and substitute any useful strings into it.
+ * 
+ * @param message
+ * @param stats
+ * @returns
+ */
+function outcome_subst_message(message, stats) {
+	for (var key in stats) {
+		if(stats[key] instanceof Array) {
+			// AND and OR joins
+			message = message.replace("__" + key.toUpperCase() + ",OR__", outcomes_joinWords(outcomes_boldList(stats[key]), "or"));
+			message = message.replace("__" + key.toUpperCase() + ",AND__", outcomes_joinWords(outcomes_boldList(stats[key]), "and"));
+		} else {
+			message = message.replace("__" + key.toUpperCase() + "__", stats[key]);
+		}
+	}
+	return message;
+}
+
 function testLearningOutcomeFeedback(text, destination) {
 	var stats = outcomes_read_passages(text);
 	console.log(stats);
@@ -444,8 +553,8 @@ function testLearningOutcomeFeedback(text, destination) {
 	$(destination).empty();
 	$(destination).append('<h4>Overall</h4>');
 
-	$(destination).append('Wordcount of shortest outcome: ' + stats.feedback.stats.minWords + '<br/>');
-	$(destination).append('Number of outcomes: ' + stats.outcomes.length + '<br/>');
+	$(destination).append('Wordcount of shortest outcome: ' + stats.feedback.stats.min_words + '<br/>');
+	$(destination).append('Number of outcomes: ' + stats.outcome_c + '<br/>');
 
 	if(stats.feedback.messages.length > 0) {
 		$(destination).append('<ul>');
@@ -457,14 +566,14 @@ function testLearningOutcomeFeedback(text, destination) {
 	
 	for(i = 0; i < stats.outcomes.length; i++) {
 		$(destination).append('<h4>Outcome #' + (i+1) + ' </h4>');
-		$(destination).append('Words: ' + stats.outcomes[i].feedback.stats.counts.totalWords + '<br/>');
-		$(destination).append('Sentences: ' + stats.outcomes[i].feedback.stats.counts.totalSentences + '<br/>');
-		$(destination).append('Syllables: ' + stats.outcomes[i].feedback.stats.counts.totalSyllables + '<br/>');
+		$(destination).append('Words: ' + stats.outcomes[i].feedback.stats.word_c + '<br/>');
+		$(destination).append('Sentences: ' + stats.outcomes[i].feedback.stats.sentence_c + '<br/>');
+		$(destination).append('Syllables: ' + stats.outcomes[i].feedback.stats.syllable_c + '<br/>');
 		$(destination).append('Readability: ' + stats.outcomes[i].feedback.stats.readability + '<br/>');
-		$(destination).append('Over-used words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.repetition, 'and') + ' (' + stats.outcomes[i].feedback.stats.repetition.length + ')<br/>');
-		$(destination).append('Flagged: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.flagged, 'and') + ' (' + stats.outcomes[i].feedback.stats.flagged.length + ')<br/>');
-		$(destination).append('Employability: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.employability, 'and') + ' (' + stats.outcomes[i].feedback.stats.employability.length + ')<br/>');
-		$(destination).append('SOLO Level: ' + stats.outcomes[i].feedback.stats.solo + '<br/>');
+		$(destination).append('Over-used words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.repetition, 'and') + ' (' + stats.outcomes[i].feedback.stats.repetition_c + ')<br/>');
+		$(destination).append('Flagged: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.flagged, 'and') + ' (' + stats.outcomes[i].feedback.stats.flagged_c + ')<br/>');
+		$(destination).append('Employability: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.employability, 'and') + ' (' + stats.outcomes[i].feedback.stats.employability_c + ')<br/>');
+		$(destination).append('SOLO Level: ' + stats.outcomes[i].feedback.stats.solo + ' (' + stats.outcomes[i].feedback.stats.solonum + ')<br/>');
 
 		if(stats.outcomes[i].feedback.messages.length > 0) {
 			$(destination).append('<ul>');
