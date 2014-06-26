@@ -39,6 +39,14 @@ var metric_parameters = {
 			{
 				"rule" : [ {
 					"var" : "word_c",
+					"is" : "below",
+					"val" : "7"
+				} ],
+				"message" : "<b>Word count:</b> __WORD_C__. This outcome is very short. You may wish to consider expanding it."
+			},
+			{
+				"rule" : [ {
+					"var" : "word_c",
 					"is" : "range",
 					"val" : [ "7", "25" ]
 				} ],
@@ -51,14 +59,6 @@ var metric_parameters = {
 					"val" : "25"
 				} ],
 				"message" : "<b>Word count:</b> __WORD_C__. This outcome is quite long. You may wish to consider making it more concise."
-			},
-			{
-				"rule" : [ {
-					"var" : "word_c",
-					"is" : "below",
-					"val" : "6"
-				} ],
-				"message" : "<b>Word count:</b> __WORD_C__. This outcome is very short. You may wish to consider expanding it."
 			},
 			{
 				"rule" : [ {
