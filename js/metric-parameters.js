@@ -1,4 +1,20 @@
 var metric_parameters = {
+	"overall_feedback" : [
+			{
+				"rule" : [ {
+					"var" : "minwords",
+					"is" : "below",
+					"val" : "20"
+				} ],
+				"message" : "You need to type longer outcomes for them to be meaningful."
+			}, {
+				"rule" : [ {
+					"var" : "outcomes",
+					"is" : "above",
+					"val" : "6"
+				} ],
+				"message" : "Too many outcomes."
+			}, ],
 	"feedback" : [
 			{
 				"rule" : [ {
@@ -7,54 +23,6 @@ var metric_parameters = {
 					"val" : "0"
 				} ],
 				"message" : "<b>Word count:</b> __WC__."
-			},
-			{
-				"rule" : [ {
-					"var" : "keyword_h",
-					"is" : "equal",
-					"val" : "0"
-				}, {
-					"var" : "keyword_l",
-					"is" : "equal",
-					"val" : "0"
-				} ],
-				"message" : "<b>Thinking Skills</b><br/> Check that you are using active verbs in your outcome that will communicate to your students what skills you are expecting them to demonstrate in completing this unit. Think about comprehension based skills like __LWORDS__, as well as higher order skills like __HWORDS__?"
-			},
-			{
-				"rule" : [ {
-					"var" : "keyword_h",
-					"is" : "above",
-					"val" : "0"
-				}, {
-					"var" : "keyword_l",
-					"is" : "equal",
-					"val" : "0"
-				} ],
-				"message" : "<b>Thinking Skills</b><br/> You are thoroughly examining how your students transform, assess apply and act on the material covered in the course. Do you also want them to check their comprehension based skills like __LWORDS__?"
-			},
-			{
-				"rule" : [ {
-					"var" : "keyword_h",
-					"is" : "equal",
-					"val" : "0"
-				}, {
-					"var" : "keyword_l",
-					"is" : "above",
-					"val" : "0"
-				} ],
-				"message" : "<b>Thinking Skills</b><br/> Your choice of verbs shows you want to build your students’ retention and comprehension skills. Did you also want to look at higher order thinking skills like __HWORDS__?"
-			},
-			{
-				"rule" : [ {
-					"var" : "keyword_h",
-					"is" : "above",
-					"val" : "0"
-				}, {
-					"var" : "keyword_l",
-					"is" : "above",
-					"val" : "0"
-				} ],
-				"message" : "<b>Thinking Skills</b><br/> Your verb selection shows you are expecting your students to develop a balance of both higher and lower order thinking skills."
 			},
 			{
 				"rule" : [ {
@@ -106,14 +74,6 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "flaggedword",
-					"is" : "above",
-					"val" : "0"
-				} ],
-				"message" : "&quot;Understand&quot; is a very general word. Can you be more specific about what skills you want your students to build?"
-			},
-			{
-				"rule" : [ {
 					"var" : "repetition",
 					"is" : "equal",
 					"val" : "1"
@@ -129,45 +89,88 @@ var metric_parameters = {
 				"message" : "You seem to use the words <b>__REP_WORD__</b> quite often. See if you can think of any alternative terms, or different ways of expressing this idea."
 			} ],
 	"empty_message" : "Please paste learning outcomes for your unit into the box to check them",
-
-	"word_l" : {
-		"knowledge" : [ "arrange", "collect", "define", "define", "describe",
-				"duplicate", "find", "identify", "label", "list", "locate",
-				"memorize", "memorise", "name", "order", "quote", "recall",
-				"recognise", "recognize", "relate", "repeat", "reproduce",
-				"retrieve", "show", "state", "tabulate", "tell" ],
-		"comprehension" : [ "associate", "classify", "compare", "contrast",
-				"describe", "differentiate", "discuss", "distinguish",
-				"estimate", "explain", "express", "identify", "indicate",
-				"interpret", "paraphrase", "report", "restate", "review",
-				"summarize", "summarise", "tell" ],
-		"application" : [ "apply", "demonstrate", "calculate", "change",
-				"classify", "complete", "discover", "employ", "examine",
-				"experiment", "illustrate", "implement", "interpret", "modify",
-				"operate", "predict", "prepare", "produce", "relate", "show",
-				"solve", "use" ]
-	},
-	"word_h" : {
-		"analysis" : [ "analyze", "analyse", "appraise", "arrange",
-				"calculate", "categorise", "categorize", "classify", "compare",
-				"connect", "contrast", "criticise", "criticize", "deconstruct",
-				"differentiate", "discriminate", "divide", "examine",
-				"explain", "infer", "order", "organise", "organize", "outline",
-				"question", "select", "separate" ],
-		"synthesis" : [ "arrange", "assemble", "combine", "compose",
-				"construct", "create", "design", "develop", "explain",
-				"formulate", "generalise", "generalize", "integrate", "invent",
-				"make", "manage", "modify", "organise", "organize", "plan",
-				"prepare", "rearrange", "rewrite", "set up", "substitute" ],
-		"evaluation" : [ "appraise", "argue", "assess", "choose", "compare",
-				"conclude", "convince", "critique", "decide", "defend",
-				"discriminate", "estimate", "evaluate", "explain", "grade",
-				"interpret", "judge", "justify", "measure", "predict",
-				"prioritise", "prioritize", "prove", "rank", "rate",
-				"recommend", "select", "summarise", "summarize", "support",
-				"test", "value" ],
-	},
-	"word_flagged" : [ "understand", ],
+	"word_flagged" : [ "understand", "appreciate", "appreciation", "know",
+			"gain", "obtain skills", "have knowledge",
+			"understand the importance", "understand importance",
+			"recognise importance", "have understanding",
+			"have an understanding", "learn about", "develop", "acquire",
+			"comprehend", "recognise", "have an awareness", "have awareness",
+			"become aware", "relate to", "relate", "use" ],
+	"flagged_feedback" : [
+			{
+				"words" : [ "understand" ],
+				"message" : "Understanding is highly subjective and can be easily misunderstood, consider an observable and measurable verb such as: __WORDS__."
+			},
+			{
+				"words" : [ "appreciate", "appreciation" ],
+				"message" : "Consider replacing 'appreciate' with an action-oriented and measurable verb, such as: __WORDS__. These verbs will provide the students with an opportunity to demonstrate the level of their awareness of the concepts you want them to achieve."
+			},
+			{
+				"words" : [ "know" ],
+				"message" : "To clarify the level of knowledge you wish students to achieve, consider replacing 'know' with an actionable and measurable verb such as: __WORDS__."
+			},
+			{
+				"words" : [ "gain" ],
+				"message" : "Consider replacing 'gain' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+			},
+			{
+				"words" : [ "obtain skills" ],
+				"message" : "Consider replacing 'obtain skills' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__"
+			},
+			{
+				"words" : [ "have knowledge" ],
+				"message" : "Consider replacing 'have knowledge' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+			},
+			{
+				"words" : [ "understand the importance",
+						"understand importance" ],
+				"message" : "Consider replacing 'understand importance of... ' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+			},
+			{
+				"words" : [ "recognise importance" ],
+				"message" : "Consider replacing 'recognise the importance of...' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS__."
+			},
+			{
+				"words" : [ "have understanding", "have an understanding" ],
+				"message" : "Consider replacing 'have an understanding of...' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge. "
+			},
+			{
+				"words" : [ "learn about" ],
+				"message" : "Consider using an observable and measureable verb to describe what the student can demonstrate, such as __WORDS__."
+			},
+			{
+				"words" : [ "develop" ],
+				"message" : "Consider replacing 'develop' with  'demonstrate' followed by what is to be demonstrated and in what context it might be demonstrated. "
+			},
+			{
+				"words" : [ "acquire" ],
+				"message" : "The verb doesn't clearly ask the student to demonstrate an achievment. This statement could be made more readable by using a different finite verb."
+			},
+			{
+				"words" : [ "comprehend" ],
+				"message" : "The verb doesn't clearly ask the student to demonstrate an achievment. This statement could be made more readable by using a different finite verb."
+			},
+			{
+				"words" : [ "recognise" ],
+				"message" : "The verb doesn't clearly ask the student to demonstrate an achievment. This statement could be made more readable by using a different finite verb."
+			},
+			{
+				"words" : [ "have an awareness", "have awareness",
+						"become aware" ],
+				"message" : "Consider replacing 'have an awareness of...' with an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge. "
+			},
+			{
+				"words" : [ "relate to" ],
+				"message" : "Consider replacing 'relate to' with 'compare' to clarify how the students will demonstrate their knowledge."
+			},
+			{
+				"words" : [ "relate" ],
+				"message" : "The verb doesn't clearly ask the student to demonstrate an achievment. This statement could be made more readable by using a different finite verb."
+			},
+			{
+				"words" : [ "use" ],
+				"message" : "The verb 'use' might need further clarification. Check your statement to evaluate the level of achievement and context you are asking the student to demonstrate."
+			} ],
 	"skill" : [
 			{
 				"name" : "management/leadership",

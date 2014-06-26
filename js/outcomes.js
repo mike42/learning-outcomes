@@ -322,15 +322,11 @@ function outcomes_outcome_feedback(parsed) {
 	var counts = outcomes_passage_wordcount(parsed);
 
 	// Build words lists
-	var word_l = metric_parameters.word_l.knowledge.concat(metric_parameters.word_l.comprehension.concat(metric_parameters.word_l.application));
-	var word_h = metric_parameters.word_h.analysis.concat(metric_parameters.word_h.synthesis.concat(metric_parameters.word_h.evaluation))
 	var stats = {
 		counts: counts,
 		readability: outcomes_passage_readability(counts.totalWords,
 				counts.totalSentences, counts.totalSyllables),
 		repetition: outcomes_repetition(parsed),
-		word_h: outcomes_keyword_match(word_h, parsed),
-		word_l: outcomes_keyword_match(word_l, parsed),
 		flagged: outcomes_keyword_match(metric_parameters.word_flagged, parsed),
 		employability: outcomes_employability_keywords(metric_parameters.skill, parsed),
 		solo: outcomes_solo_keywords(metric_parameters.solo, parsed)
@@ -452,9 +448,6 @@ function testLearningOutcomeFeedback(text, destination) {
 		$(destination).append('Words: ' + stats.outcomes[i].feedback.stats.counts.totalWords + '<br/>');
 		$(destination).append('Sentences: ' + stats.outcomes[i].feedback.stats.counts.totalSentences + '<br/>');
 		$(destination).append('Syllables: ' + stats.outcomes[i].feedback.stats.counts.totalSyllables + '<br/>');
-		$(destination).append('Readability: ' + stats.outcomes[i].feedback.stats.counts.totalSyllables + '<br/>');
-		$(destination).append('Lower order words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.word_l, 'and') + ' (' + stats.outcomes[i].feedback.stats.word_l.length + ')<br/>');
-		$(destination).append('Higher order words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.word_h, 'and') + ' (' + stats.outcomes[i].feedback.stats.word_h.length + ')<br/>');
 		$(destination).append('Readability: ' + stats.outcomes[i].feedback.stats.readability + '<br/>');
 		$(destination).append('Over-used words: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.repetition, 'and') + ' (' + stats.outcomes[i].feedback.stats.repetition.length + ')<br/>');
 		$(destination).append('Flagged: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.flagged, 'and') + ' (' + stats.outcomes[i].feedback.stats.flagged.length + ')<br/>');
