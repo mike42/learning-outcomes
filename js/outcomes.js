@@ -332,7 +332,7 @@ function outcomes_outcome_feedback(parsed) {
 		solo: outcomes_solo_keywords(metric_parameters.solo, parsed)
 	};
 
-	// Find a list of applicable messaegs
+	// Find a list of applicable messages
 	var messages = [];
 
 	return {
@@ -350,7 +350,7 @@ function outcomes_outcome_feedback(parsed) {
 function outcomes_overall_feedback(passages) {
 	var i;
 	
-	var stats = {}, messages;
+	var stats = {};
 
 	// Find how many words are in the shortest sentence.
 	stats.minWords = -1;
@@ -363,6 +363,9 @@ function outcomes_overall_feedback(passages) {
 		stats.minWords = 0;
 	}
 	
+	// Find a list of applicable messages
+	var messages = [];
+		
 	return {
 		stats : stats,
 		messages : messages
@@ -437,12 +440,21 @@ function outcomes_random_word(keywords, count) {
 function testLearningOutcomeFeedback(text, destination) {
 	var stats = outcomes_read_passages(text);
 	console.log(stats);
+	
 	$(destination).empty();
 	$(destination).append('<h4>Overall</h4>');
 
 	$(destination).append('Wordcount of shortest outcome: ' + stats.feedback.stats.minWords + '<br/>');
 	$(destination).append('Number of outcomes: ' + stats.outcomes.length + '<br/>');
 
+	if(stats.feedback.messages.length > 0) {
+		$(destination).append('<ul>');
+		for(j = 0; j < stats.feedback.messages.length; j++) {
+			$(destination).append('<li>' + stats.feedback.messages[j] + '</li>');
+		}
+		$(destination).append('</ul>');
+	}
+	
 	for(i = 0; i < stats.outcomes.length; i++) {
 		$(destination).append('<h4>Outcome #' + (i+1) + ' </h4>');
 		$(destination).append('Words: ' + stats.outcomes[i].feedback.stats.counts.totalWords + '<br/>');
@@ -453,5 +465,13 @@ function testLearningOutcomeFeedback(text, destination) {
 		$(destination).append('Flagged: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.flagged, 'and') + ' (' + stats.outcomes[i].feedback.stats.flagged.length + ')<br/>');
 		$(destination).append('Employability: ' + outcomes_joinWords(stats.outcomes[i].feedback.stats.employability, 'and') + ' (' + stats.outcomes[i].feedback.stats.employability.length + ')<br/>');
 		$(destination).append('SOLO Level: ' + stats.outcomes[i].feedback.stats.solo + '<br/>');
+
+		if(stats.outcomes[i].feedback.messages.length > 0) {
+			$(destination).append('<ul>');
+			for(j = 0; j < stats.outcomes[i].feedback.messages.length; j++) {
+				$(destination).append('<li>' + stats.outcomes[i].feedback.messages[j] + '</li>');
+			}
+			$(destination).append('</ul>');
+		}
 	}
 }
