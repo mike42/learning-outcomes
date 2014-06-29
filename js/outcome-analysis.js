@@ -1,10 +1,16 @@
+/*
+ * Learning outcome analysis code.
+ * 
+ * (C) Monash University 2014
+ */
+
 /**
  * Analyse a block of learning outcomes text.
  * 
  * @param text
  */
 function outcomes_read_passages(text) {
-	// Begin chopping
+	/* Begin chopping */
 	var endPassage = '\n\r';
 	var isEndPassage;
 	var i, c;
@@ -21,9 +27,9 @@ function outcomes_read_passages(text) {
 		if (isEndPassage == true && passage.trim().length > 0) {
 			parsed = outcomes_read_passage(passage);
 			feedback = outcomes_outcome_feedback(parsed);
-			if(feedback.stats.word_c > 0) {
+			if (feedback.stats.word_c > 0) {
 				passages.push({
-					outcome_original: passage,
+					outcome_original : passage,
 					outcome : parsed,
 					feedback : feedback
 				});
@@ -44,11 +50,11 @@ function outcomes_read_passages(text) {
  */
 function outcomes_word_filter(word) {
 	/* Some quick conversions so that the word comparisons work across different English spelling */
-	if(word.length > 3 && word.substr(word.length - 3, 3) == "ize") {
+	if (word.length > 3 && word.substr(word.length - 3, 3) == "ize") {
 		word = word.substr(0, word.length - 3) + "ise";
-	} else if(word.length > 3 && word.substr(word.length - 3, 3) == "yze") {
+	} else if (word.length > 3 && word.substr(word.length - 3, 3) == "yze") {
 		word = word.substr(0, word.length - 3) + "yse";
-	} else if(word.length > 4 && word.substr(word.length - 4, 4) == "ized") {
+	} else if (word.length > 4 && word.substr(word.length - 4, 4) == "ized") {
 		word = word.substr(0, word.length - 3) + "ised";
 	}
 	return word;
@@ -63,8 +69,8 @@ function outcomes_word_filter(word) {
  *          an array of words. All words will be returned in lowercase.
  */
 function outcomes_read_passage(passage) {
-	// Replace ". " or ".\n" outside of parenthesis with "\n". Used to divide
-	// sentences correctly.
+	/* Replace ". " or ".\n" outside of parenthesis with "\n". Used to divide 
+	 sentences correctly. */
 	var alph = 'abcdefghijklmnopqrstuvwxyz-\'1234567890.';
 	var endSentence = '\n\r?!';
 	var i, c, d, e = 0, text = '';
@@ -80,15 +86,15 @@ function outcomes_read_passage(passage) {
 		} else if (c == ")") {
 			e--;
 			if (e < 0) {
-				// Non-matching brackets.
+				/* Non-matching brackets. */
 				e = 0;
 			}
 		}
 		text += c;
 	}
 
-	// Begin chopping
-	var prevIsAlph = false; // Previous character was part of a word
+	/* Begin chopping */
+	var prevIsAlph = false; /* Previous character was part of a word */
 	var isAlph, isEndSentence;
 	var word = '';
 
@@ -102,7 +108,8 @@ function outcomes_read_passage(passage) {
 		isAlph = (alph.indexOf(c) != -1);
 		isEndSentence = (endSentence.indexOf(c) != -1);
 		if (isAlph == false && prevIsAlph == true) {
-			sentence.push([ outcomes_word_filter(word), outcomes_word_syllable(word) ]);
+			sentence.push([ outcomes_word_filter(word),
+					outcomes_word_syllable(word) ]);
 			word = '';
 		} else if (isAlph == true) {
 			word += c;
@@ -114,7 +121,8 @@ function outcomes_read_passage(passage) {
 		prevIsAlph = isAlph;
 	}
 	if (word.length > 0) {
-		sentence.push([ outcomes_word_filter(word), outcomes_word_syllable(word) ]);
+		sentence.push([ outcomes_word_filter(word),
+				outcomes_word_syllable(word) ]);
 		word = '';
 	}
 	if (sentence.length > 0) {
@@ -158,7 +166,7 @@ function outcomes_word_syllable(word) {
 	word = word.replace(/^y/, '');
 	var a = word.match(/[aeiouy]{1,2}/g);
 	if (a == null) {
-		// Long word with no vowels??
+		/* Long word with no vowels?? */
 		return 1;
 	}
 	return a.length;
@@ -200,7 +208,7 @@ function outcomes_repetition(sentences) {
 	for (i = 0; i < sentences.length; i++) {
 		for (j = 0; j < sentences[i].length; j++) {
 			if (sentences[i][j][1] <= 1) {
-				// Only worry about words greater than one syllable
+				/* Only worry about words greater than one syllable */
 				continue;
 			}
 			w = sentences[i][j][0];
@@ -231,36 +239,36 @@ function outcomes_repetition(sentences) {
  * @returns
  */
 function outcomes_keyword_match(keywords, sentences) {
-	var i, j, k; // Counters for keyword, sentence, word.
-	var w, l; // Array for keyword, number of words in.
+	var i, j, k; /* Counters for keyword, sentence, word. */
+	var w, l; /* Array for keyword, number of words in. */
 	var ok;
 
-	// To store found word info
-	var found = {}; // Number of times each word has been found
-	var found_w = []; // List of unique words found
+	/* To store found word info */
+	var found = {}; /* Number of times each word has been found */
+	var found_w = []; /* List of unique words found */
 
-	// The big loop
+	/* The big loop */
 	for (i = 0; i < keywords.length; i++) {
 		w = keywords[i].split(" ");
 		for (j = 0; j < sentences.length; j++) {
 			for (k = 0; k < sentences[j].length; k++) {
-				if (sentences[j][k][0] == w[0]) {		
-					// This part executes if we find the first word in the keyword hiding about the place
+				if (sentences[j][k][0] == w[0]) {
+					/* This part executes if we find the first word in the keyword hiding about the place */
 					l = 1;
 					ok = true;
 					while (l < w.length && (k + l) < sentences[j].length && ok) {
-						// Check remaining words in the keyword */
+						/* Check remaining words in the keyword */
 						ok = sentences[j][k + l][0] == w[l];
 						l++;
 					}
-					
+
 					if (ok) {
-						// For when we look for "hill billy" and find "hill" at the end of the sentence.
+						/* For when we look for "hill billy" and find "hill" at the end of the sentence. */
 						ok = (k + l - 1) < sentences[j].length;
 					}
 
 					if (ok) {
-						// Record a match
+						/* Record a match */
 						var keyword = keywords[i];
 
 						if (found[keyword] == undefined) {
@@ -287,9 +295,9 @@ function outcomes_keyword_match(keywords, sentences) {
 function outcomes_employability_keywords(skill, parsed) {
 	var i, keywords;
 	var skills = [];
-	for(i = 0; i < skill.length; i++) {
+	for (i = 0; i < skill.length; i++) {
 		keywords = outcomes_keyword_match(skill[i].list, parsed);
-		if(keywords.length > 0) {
+		if (keywords.length > 0) {
 			skills.push(skill[i].name);
 		}
 	}
@@ -304,9 +312,9 @@ function outcomes_employability_keywords(skill, parsed) {
  */
 function outcomes_solo_keywords(solo, parsed) {
 	var i, keywords;
-	for(i = solo.length - 1; i >= 0; i--) {
+	for (i = solo.length - 1; i >= 0; i--) {
 		keywords = outcomes_keyword_match(solo[i].list, parsed);
-		if(keywords.length > 0) {
+		if (keywords.length > 0) {
 			return solo[i].name;
 		}
 	}
@@ -320,30 +328,32 @@ function outcomes_solo_keywords(solo, parsed) {
  * @returns
  */
 function outcomes_outcome_feedback(parsed) {
-	// Find all stats
+	/* Find all stats */
 	var counts = outcomes_passage_wordcount(parsed);
 
-	// Build words lists
+	/* Build words lists */
 	var stats = {
-		word_c: counts.totalWords,
-		syllable_c: counts.totalSyllables,
-		sentence_c: counts.totalSentences,
-		readability: outcomes_passage_readability(counts.totalWords,
+		word_c : counts.totalWords,
+		syllable_c : counts.totalSyllables,
+		sentence_c : counts.totalSentences,
+		readability : outcomes_passage_readability(counts.totalWords,
 				counts.totalSentences, counts.totalSyllables),
-		repetition: outcomes_repetition(parsed),
-		flagged: outcomes_keyword_match(metric_parameters.word_flagged, parsed),
-		employability: outcomes_employability_keywords(metric_parameters.skill, parsed),
-		solo: outcomes_solo_keywords(metric_parameters.solo, parsed)
+		repetition : outcomes_repetition(parsed),
+		flagged : outcomes_keyword_match(outcome_parameters.word_flagged,
+				parsed),
+		employability : outcomes_employability_keywords(
+				outcome_parameters.skill, parsed),
+		solo : outcomes_solo_keywords(outcome_parameters.solo, parsed)
 	};
 
-	// Add counts
+	/* Add counts */
 	stats.repetition_c = stats.repetition.length;
 	stats.flagged_c = stats.flagged.length;
 	stats.employability_c = stats.employability.length;
 	stats.solonum = stats.solo == "" ? 0 : 1;
-	
-	// Find a list of applicable messages
-	var messages = outcomes_compile_messages(stats, metric_parameters.feedback);
+
+	/* Find a list of applicable messages */
+	var messages = outcomes_compile_messages(stats, outcome_parameters.feedback);
 
 	return {
 		stats : stats,
@@ -359,30 +369,32 @@ function outcomes_outcome_feedback(parsed) {
  */
 function outcomes_overall_feedback(passages) {
 	var i;
-	
+
 	var stats = {};
 
-	// Find how many words are in the shortest sentence.
+	/* Find how many words are in the shortest sentence. */
 	stats.min_words = -1;
-	for(i = 0; i < passages.length; i++) {
-		if(stats.min_words == -1 || passages[i].feedback.stats.word_c < stats.min_words) {
+	for (i = 0; i < passages.length; i++) {
+		if (stats.min_words == -1
+				|| passages[i].feedback.stats.word_c < stats.min_words) {
 			stats.min_words = passages[i].feedback.stats.word_c;
 		}
 	}
-	if(stats.min_words == -1) { // When there are no passages at all.
+	if (stats.min_words == -1) { /* When there are no passages at all. */
 		stats.min_words = 0;
 	}
-	
-	// Add counts
+
+	/* Add counts */
 	stats.outcome_c = passages.length;
-	
-	// Find a list of applicable messages
-	var messages = outcomes_compile_messages(stats, metric_parameters.overall_feedback);
-	if(messages.length > 1 && messages[messages.length - 1] == "") {
+
+	/* Find a list of applicable messages */
+	var messages = outcomes_compile_messages(stats,
+			outcome_parameters.overall_feedback);
+	if (messages.length > 1 && messages[messages.length - 1] == "") {
 		messages.pop();
 		stats.cancel = "yes";
 	}
-	
+
 	return {
 		stats : stats,
 		messages : messages
@@ -460,10 +472,10 @@ function outcomes_random_word(keywords) {
 function outcomes_example_words() {
 	var temp, i, found = {}, ret = [];
 
-	for(i = 0; i < metric_parameters.solo.length; i++) {
-		do { // Loop prevents duplicates on list.
-			temp = outcomes_random_word(metric_parameters.solo[i].list);
-		} while(found[temp] !== undefined);
+	for (i = 0; i < outcome_parameters.solo.length; i++) {
+		do { /* Loop prevents duplicates on list. */
+			temp = outcomes_random_word(outcome_parameters.solo[i].list);
+		} while (found[temp] !== undefined);
 		found[temp] = 1;
 		ret.push(temp);
 	}
@@ -479,32 +491,33 @@ function outcomes_example_words() {
  * @returns {Array} A list of matched messages
  */
 function outcomes_compile_messages(stats, rules) {
-    var f = []; // Array of feedback strings
-    for(i = 0; i < rules.length; i++) {
-    	/* Test each rule in the list */
-        if(outcomes_match_message(stats, rules[i].rule)) {
-        	stats.words = outcomes_example_words();
-            f.push(outcomes_subst_message(rules[i].message, stats));
-            if(rules[i].cancel !== undefined) {
-            	f.push("");
-            	return f;
-            }
-        }
-    }
-    
-    if(stats.flagged !== undefined && stats.flagged.length > 0) {
-    	/* Add flagged word feedback here. Does not work under 'overall' feedback, hence undefined check */
-    	var message = "";
-    	for(i = 0; i < stats.flagged.length; i++) {
-    		message = outcomes_find_flagged_message(stats.flagged[i], metric_parameters.flagged_feedback);
-    		if(message != undefined) {
-    			stats.words = outcomes_example_words();
-    			f.push(outcomes_subst_message(message, stats));
-    			break; // Limit of one verb suggestion
-    		}
-    	}
-    }
-    return f;
+	var f = []; /* Array of feedback strings */
+	for (i = 0; i < rules.length; i++) {
+		/* Test each rule in the list */
+		if (outcomes_match_message(stats, rules[i].rule)) {
+			stats.words = outcomes_example_words();
+			f.push(outcomes_subst_message(rules[i].message, stats));
+			if (rules[i].cancel !== undefined) {
+				f.push("");
+				return f;
+			}
+		}
+	}
+
+	if (stats.flagged !== undefined && stats.flagged.length > 0) {
+		/* Add flagged word feedback here. Does not work under 'overall' feedback, hence undefined check */
+		var message = "";
+		for (i = 0; i < stats.flagged.length; i++) {
+			message = outcomes_find_flagged_message(stats.flagged[i],
+					outcome_parameters.flagged_feedback);
+			if (message != undefined) {
+				stats.words = outcomes_example_words();
+				f.push(outcomes_subst_message(message, stats));
+				break; /* Limit of one verb suggestion */
+			}
+		}
+	}
+	return f;
 }
 
 /**
@@ -512,9 +525,9 @@ function outcomes_compile_messages(stats, rules) {
  */
 function outcomes_find_flagged_message(word, list) {
 	var i, j;
-	for(i = 0; i < list.length; i++) {
-		for(j = 0; j < list[i].words.length; j++) {
-			if(list[i].words[j] == word) {
+	for (i = 0; i < list.length; i++) {
+		for (j = 0; j < list[i].words.length; j++) {
+			if (list[i].words[j] == word) {
 				/* Return the first message in the list which matches this flagged word */
 				return list[i].message;
 			}
@@ -531,21 +544,22 @@ function outcomes_find_flagged_message(word, list) {
  * @returns {Boolean}
  */
 function outcomes_match_message(stats, rule) {
-	if(rule.length == 0) {
+	if (rule.length == 0) {
 		return false;
 	}
-	
+
 	var i, match = true, v;
-	for(i = 0; i < rule.length; i++) {
-		v = stats[rule[i].var];		
-		if(v === undefined) {
+	for (i = 0; i < rule.length; i++) {
+		v = stats[rule[i].check];
+		if (v === undefined) {
 			match = false;
-			console.log("A rule tried to use undefined metric: " + rule[i].var);
+			console.log("A rule tried to use undefined metric: "
+					+ rule[i].check);
 			break;
 		}
-		
+
 		/* Compare it */
-		switch(rule[i].is) {
+		switch (rule[i].is) {
 		case 'above':
 			match = (v > rule[i].val);
 			break;
@@ -555,7 +569,7 @@ function outcomes_match_message(stats, rule) {
 		case 'equal':
 			match = (v == rule[i].val);
 			break;
-		case 'range': // Inclusive range
+		case 'range': /* Inclusive range */
 			match = (v >= rule[i].val[0]) && (v <= rule[i].val[1]);
 			break;
 		default:
@@ -563,8 +577,8 @@ function outcomes_match_message(stats, rule) {
 			console.log("Invalid operator in rule list: " + rule[i].is);
 			break;
 		}
-		
-		if(!match) {
+
+		if (!match) {
 			break;
 		}
 	}
@@ -572,20 +586,23 @@ function outcomes_match_message(stats, rule) {
 }
 
 /**
- * Take a message, and substitute any useful strings into it.
+ * Take a message, and substitute available strings into it.
  * 
  * @param message
  * @param stats
  * @returns
  */
 function outcomes_subst_message(message, stats) {
-	for (var key in stats) {
-		if(stats[key] instanceof Array) {
-			// AND and OR joins
-			message = message.replace("__" + key.toUpperCase() + ",OR__", outcomes_joinWords(outcomes_boldList(stats[key]), "or"));
-			message = message.replace("__" + key.toUpperCase() + ",AND__", outcomes_joinWords(outcomes_boldList(stats[key]), "and"));
+	for ( var key in stats) {
+		if (stats[key] instanceof Array) {
+			/* Allow AND and OR joins on word lists */
+			message = message.replace("__" + key.toUpperCase() + ",OR__",
+					outcomes_joinWords(outcomes_boldList(stats[key]), "or"));
+			message = message.replace("__" + key.toUpperCase() + ",AND__",
+					outcomes_joinWords(outcomes_boldList(stats[key]), "and"));
 		} else {
-			message = message.replace("__" + key.toUpperCase() + "__", stats[key]);
+			message = message.replace("__" + key.toUpperCase() + "__",
+					stats[key]);
 		}
 	}
 	return message;

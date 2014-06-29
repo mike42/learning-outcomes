@@ -1,8 +1,14 @@
-var metric_parameters = {
+/*
+ * Learning outcome parameters
+ * 
+ * (C) Monash University 2014
+ */
+
+var outcome_parameters = {
 	"overall_feedback" : [
 			{
 				"rule" : [ {
-					"var" : "min_words",
+					"check" : "min_words",
 					"is" : "equal",
 					"val" : "0"
 				} ],
@@ -11,7 +17,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "min_words",
+					"check" : "min_words",
 					"is" : "range",
 					"val" : [ "1", "3" ]
 				} ],
@@ -20,25 +26,25 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "outcome_c",
+					"check" : "outcome_c",
 					"is" : "range",
-					"val" : ["7", "10"]
+					"val" : [ "7", "10" ]
 				} ],
 				"message" : "You have included a large number of outcomes. Can some of them be merged together or removed?"
 			},
 			{
 				"rule" : [ {
-					"var" : "outcome_c",
+					"check" : "outcome_c",
 					"is" : "above",
-					"val" : ["10"]
+					"val" : [ "10" ]
 				} ],
 				"message" : "You have included too many outcomes. Please remove a few.",
 				"cancel" : "yes"
-			}],
+			} ],
 	"feedback" : [
 			{
 				"rule" : [ {
-					"var" : "word_c",
+					"check" : "word_c",
 					"is" : "below",
 					"val" : "7"
 				} ],
@@ -46,7 +52,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "word_c",
+					"check" : "word_c",
 					"is" : "range",
 					"val" : [ "7", "25" ]
 				} ],
@@ -54,7 +60,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "word_c",
+					"check" : "word_c",
 					"is" : "above",
 					"val" : "25"
 				} ],
@@ -62,7 +68,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "readability",
+					"check" : "readability",
 					"is" : "above",
 					"val" : "60"
 				} ],
@@ -70,7 +76,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "readability",
+					"check" : "readability",
 					"is" : "range",
 					"val" : [ "30", "60" ]
 				} ],
@@ -78,7 +84,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "readability",
+					"check" : "readability",
 					"is" : "below",
 					"val" : "30"
 				} ],
@@ -86,7 +92,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "employability_c",
+					"check" : "employability_c",
 					"is" : "equal",
 					"val" : "0"
 				} ],
@@ -94,7 +100,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "employability_c",
+					"check" : "employability_c",
 					"is" : "above",
 					"val" : "0"
 				} ],
@@ -102,7 +108,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "solonum",
+					"check" : "solonum",
 					"is" : "above",
 					"val" : "0"
 				} ],
@@ -110,7 +116,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "solonum",
+					"check" : "solonum",
 					"is" : "equal",
 					"val" : "0"
 				} ],
@@ -118,7 +124,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "repetition_c",
+					"check" : "repetition_c",
 					"is" : "equal",
 					"val" : "1"
 				} ],
@@ -126,7 +132,7 @@ var metric_parameters = {
 			},
 			{
 				"rule" : [ {
-					"var" : "repetition_c",
+					"check" : "repetition_c",
 					"is" : "above",
 					"val" : "1"
 				} ],
@@ -351,7 +357,7 @@ var metric_parameters = {
 						"group", "identify", "label", "list", "locate",
 						"match", "measure", "memorise memorize", "name",
 						"note", "observe", "order", "point out", "quote",
-						"rank", "recall", "rcognise", "record", "restate",
+						"rank", "recall", "recognise", "record", "restate",
 						"score", "select", "separate", "show", "sketch",
 						"state", "subdivide", "substitute", "summarise",
 						"tell", "transmit", "use", "write" ]
