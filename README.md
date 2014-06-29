@@ -29,6 +29,7 @@ The remainder of this section walks through chopping up index.html and putting i
 
 The CSS code which styles the tool is as follows (some extraneous code has been cut out). Note the colours are from the Monash branding guidelines, and that you need [sectionarrow.png](https://github.com/mike42/learning-outcomes/blob/master/css/sectionarrow.png).
 
+````css
 	<style>
 	.info-panel {
 		padding-top: 20px;
@@ -92,9 +93,11 @@ The CSS code which styles the tool is as follows (some extraneous code has been 
 		min-height: 4em;
 	}
 	</style>
+```
 
 Now you need to get the forms and boxes to work with. The page has two columns, which go in a row per below. Again, the header code has been cut so that this can be pasted into the edit box of your CMS.
 
+````html
 	<div class="row">
 		<div class="col-sm-6 info-panel">
 			<p>(intro text goes here)</p>
@@ -118,9 +121,11 @@ Now you need to get the forms and boxes to work with. The page has two columns, 
 			</div>
 		</div>
 	</div>
+```
 
 The final step is to include a block of javascript to analyse the text box and draw the rows. The page tabs between an "edit" mode and a "check" mode:
 
+````js
 	<script type="text/javascript">
 	$('#checkOutcomes').on('click', function() {
 		checkOutcomes();
@@ -194,6 +199,7 @@ The final step is to include a block of javascript to analyse the text box and d
 		showOutcome(0);
 	}
 	</script>
+```
 
 ### Debugging
 - If the site looks ugly, make sure you are loading bootstrap.css
