@@ -1,16 +1,16 @@
 Learning Outcomes
------------------
+=================
 This is a javascript-based tool for analysing learning outcomes for use in higher education.
 
 How to run
-==========
+----------
 This is the easy part:
 - Download the whole repository to your computer.
 - Open up index.html in your favourite web browser.
 - Follow the onscreen instructions.
 
 Integration crash-course
-========================
+------------------------
 The tool is designed to be embedded into a content-management system. For flexibility, it is split into three parts:
 
 - The [parameters file](https://github.com/mike42/learning-outcomes/blob/master/js/outcome-parameters.js), containing feedback crieteria and word lists. Education designers may need to edit this to change feedback rules as the need arises.
@@ -204,7 +204,7 @@ The final step is to include a block of javascript to analyse the text box and d
 - If you pick a bootstrap-based theme, the visual integration will be less troublesome. Bootstrap and jQuery are best included in the theme, rather than the individual page.
 
 Extending the tool
-==================
+------------------
 The test.html file shows the full range of parameters which are available, and rules can be written into the parameters file for any of these.
 
 Only a subset of available information is actually printed currently, so you just need to add a feedback rule which uses the information.
