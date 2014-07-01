@@ -120,7 +120,7 @@ var outcome_parameters = {
 					"is" : "equal",
 					"val" : "0"
 				} ],
-				"message" : "<b>Measurability of this outcome</b><br/>Consider including an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__."
+				"message" : "<b>Observability of this outcome</b><br/>Consider including an action-oriented and measurable verb that clarifies how the students will demonstrate their knowledge, such as __WORDS,OR__."
 			},
 			{
 				"rule" : [ {
@@ -261,15 +261,14 @@ var outcome_parameters = {
 						"edit", "elicit", "enlist", "explain", "express",
 						"formulate", "furnish", "incorporate", "influence",
 						"interact", "interpret", "interview", "involve",
-						"joid", "judge", "lecture", "listen", "market",
-						"mediate", "moderate", "motivate", "negotiate",
-						"observe", "outline", "participate", "persuade",
-						"present", "promote", "propose", "publicise",
-						"publicize", "reconcile", "recruit", "refer",
-						"reinforce", "report", "resolve", "respond", "solicit",
-						"specify", "speak", "suggest", "summarise",
-						"summarize", "synthesise", "synthesize", "translate",
-						"write" ]
+						"judge", "lecture", "listen", "market", "mediate",
+						"moderate", "motivate", "negotiate", "observe",
+						"outline", "participate", "persuade", "present",
+						"promote", "propose", "publicise", "publicize",
+						"reconcile", "recruit", "refer", "reinforce", "report",
+						"resolve", "respond", "solicit", "specify", "speak",
+						"suggest", "summarise", "summarize", "synthesise",
+						"synthesize", "translate", "write" ]
 			},
 			{
 				"name" : "technical",
