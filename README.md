@@ -15,25 +15,49 @@ The tool is designed to be embedded into a content-management system. For flexib
 
 - The [parameters file](https://github.com/mike42/learning-outcomes/blob/master/js/outcome-parameters.js), containing feedback crieteria and word lists. Education designers may need to edit this to change feedback rules as the need arises.
 - The [compressed analysis code](https://github.com/mike42/learning-outcomes/blob/master/js/outcome-analysis.min.js), containing all the fancy code to analyse the text.
-- A small section of javascript to call the tool and write the feedback onto the page you are working on. A website maintainer may need to edit this if they want to change the user experience.
+- A small section of code which loads the tool and writes the feedback onto the page. A website maintainer may need to edit this if they want to change the user experience.
 
-The tool itself has no dependencies. Bootstrap/jQuery is suggested for rendering them, and [index.html](https://github.com/mike42/learning-outcomes/blob/master/index.html) is a minimal example which uses these. They can be loaded from a CDN, or uploaded to the server. All files mentioned can be found in this repository.
+The tool itself has no dependencies. Bootstrap/jQuery is suggested for rendering them, and [index.html](https://github.com/mike42/learning-outcomes/blob/master/index.html) is a minimal example which uses these. The remainder of this section walks through chopping up index.html and putting it in your Content Management System.
 
-````html
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></script>
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-```
-
-The remainder of this section walks through chopping up index.html and putting it in your Content Management System. You will need to upload the library and the parameter file to the web space and include them on a page:
+In the page header, get the CSS for Bootstrap:
 
 ````html
-<script src="js/outcome-parameters.js"></script>
-<script src="js/outcome-analysis.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></link>
 ```
 
-The CSS code which styles the tool is as follows (some extraneous code has been cut out). Note the colours are from the Monash branding guidelines, and that you need [sectionarrow.png](https://github.com/mike42/learning-outcomes/blob/master/css/sectionarrow.png).
+Drop in some CSS code to style the extra features. Note that two external images are used:
 
 ````css
+.section {
+	font-size: 70%;
+	float: left;
+	width: 100%;
+	padding: 0;
+	height: 50px;
+	position: relative;
+	background: rgb(0, 82, 139);
+}
+
+.section .arrow {
+	position: absolute;
+	width: 27px;
+	height: 14px;
+	bottom: -14px;
+	background: url(//mike42.github.io/learning-outcomes/css/sectionarrow.png) no-repeat 0 0;
+	left: 2.04%;
+	z-index: 1;
+}
+
+.section p {
+	float: left;
+	width: 96%;
+	font-size: 1.6em;
+	color: #fff;
+	font-weight: bold;
+	padding: 0 2%;
+	line-height: 50px;
+}
+
 .info-panel {
 	padding-top: 20px;
 	padding-right: 0;
@@ -49,6 +73,11 @@ The CSS code which styles the tool is as follows (some extraneous code has been 
 #feedback-panel div {
 	padding-left: 15px;
 	padding-right: 15px;
+}
+
+#show-inner a {
+	color: #428bca;
+	text-decoration: none;
 }
 
 #show-inner a {
@@ -81,9 +110,10 @@ The CSS code which styles the tool is as follows (some extraneous code has been 
 	height: 19px;
 	right: -10px;
 	top: 20%;
-	background: url(css/outcomearrow.png) no-repeat 0 0;
+	background: url(//mike42.github.io/learning-outcomes/css/outcomearrow.png) no-repeat 0 0;
 	z-index: 1;
 }
+
 
 #edit, #show .wrapper, .info-panel p {
 	padding-right: 15px;
@@ -95,39 +125,50 @@ The CSS code which styles the tool is as follows (some extraneous code has been 
 	padding-bottom: 10px;
 	min-height: 4em;
 }
-```
+````
 
-Now you need to get the forms and boxes to work with. The page has two columns, which go in a row per below. Again, the header code has been cut so that this can be pasted into the edit box of your CMS.
+Next, add this block of javascript and HTML to "embed" the tool somewhere in the page:
 
 ````html
 <div class="row">
+	<div class="section">
+		<p>Test Your Learning Outcomes</p>
+		<div class="arrow"></div>
+	</div>
+</div>
+<div class="row">
 	<div class="col-sm-6 info-panel">
-		<p>(intro text goes here)</p>
-
-		<div class="form-group" id="edit">
-			<textarea class="form-control" style="resize: none" rows=12
-				placeholder="Enter your learning outcomes here." id="txtOutcome"></textarea>
+		<p>This tool is designed to help you check the wording of your learning outcomes.
+        In the text box below, paste the learning outcomes for your unit, either all together
+        or one at a time. The tool will then generate feedback to help you reflect on how your
+        outcome is worded. The tool will check for word count, readability, thinking skills,
+        employability skills, and other aspects.
+        </p>
+        
+	    <div class="form-group" id="edit">
+	    	<textarea class="form-control" style="resize: none" rows=12
+	    		placeholder="Enter your learning outcomes here." id="txtOutcome"></textarea>
 			<div class="wrapper">
 				<button class="btn btn-default pull-right" id="checkOutcomes">Check <span class="glyphicon glyphicon-flash"></span></button>
 			</div>
-		</div>
-		<div id="show" style="display: none">
+	    </div>
+	    <div id="show" style="display: none">
 			<div id="show-inner"></div>
-				<div class="wrapper">
-					<button class="btn btn-default pull-right" id="editOutcomes"><span class="glyphicon glyphicon-chevron-left"></span> Edit</button>
-				</div>
+			<div class="wrapper">
+				<button class="btn btn-default pull-right" id="editOutcomes"><span class="glyphicon glyphicon-chevron-left"></span> Edit</button>
 			</div>
 		</div>
-		<div class="col-sm-6 form-panel">
-			<div id="feedback-panel" style="display: none">..</div>
-		</div>
+    </div>
+	<div class="col-sm-6 form-panel">
+		<div id="feedback-panel" style="display: none">..</div>
 	</div>
 </div>
-```
 
-The final step is to include a block of javascript to analyse the text box and draw the rows. The page tabs between an "edit" mode and a "check" mode:
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//mike42.github.io/learning-outcomes/js/outcome-analysis.min.js"></script>
+<script src="//mike42.github.io/learning-outcomes/js/outcome-parameters.js"></script>
 
-````js
+<script type="text/javascript">
 $('#checkOutcomes').on('click', function() {
 	checkOutcomes();
 })
@@ -158,7 +199,7 @@ function checkOutcomes() {
 	$('#feedback-panel').hide();
 	$('#feedback-panel').empty();
 	var stats = outcomes_read_passages($('#txtOutcome').val());
-
+	
 	if(stats.feedback.messages.length > 0) {
 		for(j = 0; j < stats.feedback.messages.length; j++) {
 			$('#feedback-panel').append('<p class="well">' + stats.feedback.messages[j] + '</p>');
@@ -169,12 +210,12 @@ function checkOutcomes() {
 		$('#feedback-panel').show(200);
 		return;
 	}
-
+	
 	var feedback;
 	$('#show-inner').empty();
-
+	
 	for(i = 0; i < stats.outcomes.length; i++) {
-
+		
 		feedback = "<div id='feedback-" + i + "' style='display: none'>";
 		for(j = 0; j < stats.outcomes[i].feedback.messages.length; j++) {
 			feedback += '<p>' + stats.outcomes[i].feedback.messages[j] + '</p>';
@@ -195,22 +236,26 @@ function checkOutcomes() {
 	$('#feedback-panel').show();
 	$('#edit').hide();
 	$('#show').show();
-
+	
 	current = 0;
 	showOutcome(0);
 }
+</script>
 ```
 
+The tool should now work on the target page.
+
 ### Debugging
-- If the site looks ugly, make sure you are loading bootstrap.css
-- If the code doesn't do anything, make sure you are loading jQuery, and check the developer console
+- If the site looks ugly, make sure you are loading bootstrap.css.
+- If the code doesn't do anything, make sure you are loading jQuery, and check the developer console.
+- For extra flexibility, instead of including the parameter file, substitute in the content in so that you can edit it locally.
 
 ### SquareSpace specifics
-- Apparently [this link](http://answers.squarespace.com/questions/2080/where-do-i-upload-javascript-files) shows how to upload javascript files.
-- If you pick a bootstrap-based theme, the visual integration will be less troublesome. Bootstrap and jQuery are best included in the theme, rather than the individual page.
+- Paste the HTML/Javascript and CSS blocks into the page content in HTML view.
+- Add the line which loads Bootrap CSS under Page Settings -> Advanced -> Page Header Code Injection.
 
 Extending the tool
 ------------------
 The test.html file shows the full range of parameters which are available, and rules can be written into the parameters file for any of these.
 
-Only a subset of available information is actually printed currently, so you just need to add a feedback rule which uses the information.
+Only a subset of available information is actually printed currently, so you just need to add a feedback rule which uses the extra information if you need it.
