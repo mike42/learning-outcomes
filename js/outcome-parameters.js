@@ -112,7 +112,7 @@ var outcome_parameters = {
 					"is" : "above",
 					"val" : "0"
 				} ],
-				"message" : "<b>SOLO Taxonomy</b><br/> Your verb choices reflect the <b>__SOLO__</b> level of the SOLO taxonomy"
+				"message" : "<b>SOLO Taxonomy</b><br/>Your verb choices reflect the  <b>__SOLO__</b> level of the SOLO taxonomy"
 			},
 			{
 				"rule" : [ {
@@ -350,7 +350,7 @@ var outcome_parameters = {
 			} ],
 	"solo" : [
 			{
-				"name" : "uni-structural",
+				"name" : "single concept",
 				"list" : [ "arrange", "ask ", "associate", "cite ", "define",
 						"draw", "duplicate", "find", "find errors", "focus",
 						"group", "identify", "label", "list", "locate",
@@ -362,7 +362,7 @@ var outcome_parameters = {
 						"tell", "transmit", "use", "write" ]
 			},
 			{
-				"name" : "multi-structural",
+				"name" : "several concepts",
 				"list" : [ "calculate", "chart", "choose", "clarify",
 						"classify", "complete", "compute", "consider",
 						"correlate", "define", "demonstrate", "describe",
@@ -380,7 +380,7 @@ var outcome_parameters = {
 						"trace", "transfer", "write" ]
 			},
 			{
-				"name" : "relational",
+				"name" : "integrated concepts",
 				"list" : [ "administer", "advertise", "analyse", "anticipate",
 						"apply", "appraise", "arrange", "articulate",
 						"assemble", "attach", "break down", "calculate",
@@ -400,7 +400,7 @@ var outcome_parameters = {
 						"teach", "weigh" ]
 			},
 			{
-				"name" : "extended abstract",
+				"name" : "transformed concepts",
 				"list" : [ "act", "adapt", "deep understanding", "appreciate",
 						"argue", "assess", "change", "collaborate", "compose",
 						"construct", "convince", "create", "debate", "deduce",
